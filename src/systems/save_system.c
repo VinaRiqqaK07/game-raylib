@@ -58,3 +58,8 @@ bool SaveExists()
 
     return false;
 }
+
+void DeleteSave()
+{
+    remove("save.dat");
+}

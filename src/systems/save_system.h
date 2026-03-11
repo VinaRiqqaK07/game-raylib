@@ -7,3 +7,4 @@
 void SaveGameFunc();
 bool LoadGame();
 bool SaveExists();
+void DeleteSave();

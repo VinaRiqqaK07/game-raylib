@@ -48,6 +48,7 @@ void UpdateMenuScene()
     
     if(startClicked)
     {
+        DeleteSave();
         UnloadMenuScene();     
     }
     

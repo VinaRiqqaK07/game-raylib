@@ -10,7 +10,7 @@ void UpdatePuzzle1Future();
 void DrawPuzzle1Scene();
 void DrawPuzzle1Past();
 void DrawPuzzle1Future();
-
+void DrawKeypad();
 void UnloadPuzzle1Scene();
 
 #endif

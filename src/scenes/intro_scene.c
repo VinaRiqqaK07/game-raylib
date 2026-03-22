@@ -14,6 +14,7 @@ float scaleSprite = 0.1f;
 bool introFinish = false;
 Texture2D placeholder;
 Vector2 spritePositions[SPRITE_COUNT];
+bool isTransitioning = false;
 
 void InitIntroScene()
 {
@@ -52,22 +53,27 @@ void UpdateIntroScene()
         if(currentIndex < SPRITE_COUNT - 1)
         {
             timer = (currentIndex + 1) * SPAWN_DELAY;
-        }
+        }   
     }
     
     if(timer > 30.0f)
     {
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) || timer >= 33.0f)
         {
-            UnloadIntroScene();
+            game.currentLevel = 1;
+            SaveGameFunc();
+
+            ChangeScene(SCENE_PUZZLE1);
         }
     }
+    
+    
+    
 }
 
 void DrawIntroScene()
 {
     ClearBackground(BLACK);
-    //DrawText("ALBUM", (SCREEN_WIDTH/2)- MeasureText("ALBUM", 70), 50, 70, WHITE);
 
     for(int i = 0; i < SPRITE_COUNT; i++)
     {
@@ -91,17 +97,10 @@ void DrawIntroScene()
             
             DrawTextureEx(placeholder, spritePositions[i], rotation, 0.1f, tint);
         }
-        
-        
     }
-    
-    
 }
 
 void UnloadIntroScene()
 {
-    game.currentLevel = 1;
-    SaveGameFunc();
-    
-    ChangeScene(SCENE_PUZZLE1);
+    UnloadTexture(placeholder);
 }

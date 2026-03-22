@@ -1,296 +1,208 @@
 #include "raylib.h"
-#include <stdio.h>
-#include <string.h>
 #include "puzzle1_scene.h"
-#include "../utils/constants.h"
 #include "../core/game.h"
 #include "../core/scene_manager.h"
-#include "../systems/ui_system.h"
+#include "room0/room0_future_scene.h"
+#include "room0/room0_past_scene.h"
+#include "room1/room1_future_scene.h"
+#include "room1/room1_past_scene.h"
+#include "room2/room2_future_scene.h"
+#include "room2/room2_past_scene.h"
+#include "room3/room3_future_scene.h"
+#include "room3/room3_past_scene.h"
+#include "room4/room4_future_scene.h"
+#include "room4/room4_past_scene.h"
 
-#define MAX_PASS 8
+#define TOTAL_ROOM 5
+int currentRoom = 0;
 
-char password[MAX_PASS+1] = "\0";
-int passLength = 0;
+void (*InitRoomsPast[TOTAL_ROOM])() = {
+    InitRoom0Past,
+    InitRoom1Past,
+    InitRoom2Past,
+    InitRoom3Past,
+    InitRoom4Past,
+};
+void (*UpdateRoomsPast[TOTAL_ROOM])() = {
+    UpdateRoom0Past,
+    UpdateRoom1Past,
+    UpdateRoom2Past,
+    UpdateRoom3Past,
+    UpdateRoom4Past
+};
+void (*DrawRoomsPast[TOTAL_ROOM])() = {
+    DrawRoom0Past,
+    DrawRoom1Past,
+    DrawRoom2Past,
+    DrawRoom3Past,
+    DrawRoom4Past
+};
 
-
-typedef struct {
-    Rectangle bounds;
-    int value;
-} KeypadButton;
-
-KeypadButton keypad[12];
-
-int startXkeypad = 300;
-int startYkeypad = 250;
-int size = 70;
-int gap = 10;
-
-int numbers[10] = {1,2,3,4,5,6,7,8,9,0};
-const char correctPassword[] = "5431";
-bool passwordEntered = false;
-bool passwordCorrect = false;
-
-typedef struct PuzzleBox
-{
-    Vector2 position;
-    float rotation;
-    bool flipped;
-
-} PuzzleBox;
-
-PuzzleBox box;
-Vector2 center;
-
-char digit;
-bool numberOne, numberTwo, numberThree;
+void (*InitRoomsFuture[TOTAL_ROOM])() = {
+    InitRoom0Future,
+    InitRoom1Future,
+    InitRoom2Future,
+    InitRoom3Future,
+    InitRoom4Future
+};
+void (*UpdateRoomsFuture[TOTAL_ROOM])() = {
+    UpdateRoom0Future,
+    UpdateRoom1Future,
+    UpdateRoom2Future,
+    UpdateRoom3Future,
+    UpdateRoom4Future
+};
+void (*DrawRoomsFuture[TOTAL_ROOM])() = {
+    DrawRoom0Future,
+    DrawRoom1Future,
+    DrawRoom2Future,
+    DrawRoom3Future,
+    DrawRoom4Future
+};
 
 void InitPuzzle1Scene()
 {
-    box.position = (Vector2){400, 300};
-    box.rotation = 0;
-    box.flipped = false;
-    
+    if (game.role == ROLE_PAST)
+    {
+        for(int i = 0; i < TOTAL_ROOM; i++)
+        {
+            InitRoomsPast[i]();
+        }
+    }
+    else if (game.role == ROLE_FUTURE)
+    {
+        for(int i = 0; i < TOTAL_ROOM; i++)
+        {
+            InitRoomsFuture[i]();
+        }
+    }
 }
 
 void UpdatePuzzle1Scene()
 {
     if (game.role == ROLE_PAST)
     {
-        UpdatePuzzle1Past();
+        UpdateRoomsPast[currentRoom]();
+    
+        HandleRoomUI(&currentRoom, TOTAL_ROOM);
     }
     else if (game.role == ROLE_FUTURE)
     {
-        UpdatePuzzle1Future();
+        UpdateRoomsFuture[currentRoom]();
+    
+        HandleRoomUI(&currentRoom, TOTAL_ROOM);
     }
 }
-
-void UpdatePuzzle1Past()
-{
-    Rectangle boxRect = {box.position.x - 120, box.position.y - 120, 360, 360};
-    
-    if (CheckCollisionPointRec(GetMousePosition(), boxRect))
-    {
-        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
-        {
-            float mouseDelta = GetMouseDelta().x;
-            box.rotation += mouseDelta * 0.5f;
-            DrawText("Mouse Left Down", 500, 600, 20, WHITE);
-        }
-        
-        if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON))
-        {
-            box.flipped = !box.flipped;
-        }
-        
-    }
-}
-
-void UpdatePuzzle1Future()
-{
-    // Keyboard keypad input
-    int key = GetKeyPressed();
-
-    if (key >= KEY_ZERO && key <= KEY_NINE)
-    {
-        if (passLength < MAX_PASS)
-        {
-            password[passLength++] = '0' + (key - KEY_ZERO);
-            password[passLength] = '\0';
-        }
-    }
-
-    if (IsKeyPressed(KEY_BACKSPACE))
-    {
-        passLength--;
-        if (passLength < 0) passLength = 0;
-        password[passLength] = '\0';
-        passwordEntered = false;
-    }
-    
-    //Mouse keypad input
-    Vector2 mouse = GetMousePosition();
-
-    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
-    {
-        for (int i = 0; i < 12; i++)
-        {
-            if (CheckCollisionPointRec(mouse, keypad[i].bounds))
-            {
-                if (i > 9)
-                {
-                    if (i == 10)
-                    {
-                        passLength = 0;
-                        if (passLength < 0) passLength = 0;
-                        password[passLength] = '\0';
-                        passwordEntered = false;
-                    }
-                    if (i == 11)
-                    {
-                        passwordEntered = true;
-                        if (strcmp(password, correctPassword) == 0)
-                        {
-                            passwordCorrect = true;
-                            
-                        }
-                        else
-                        {
-                            passwordCorrect = false;
-                        }
-                    }
-                }
-                else
-                {
-                    if (passLength < MAX_PASS)
-                    {
-                        password[passLength++] = '0' + keypad[i].value;
-                        password[passLength] = '\0';
-                    }
-                }
-            }
-        }
-    }
-    
-}
-
 
 void DrawPuzzle1Scene()
 {
     ClearBackground(BLACK);
     
-    
-    
     if (game.role == ROLE_PAST)
     {
-        DrawPuzzle1Past();
+        DrawRoomsPast[currentRoom]();
+    
+        DrawRoomUI();
     }
     else if (game.role == ROLE_FUTURE)
     {
-        DrawPuzzle1Future();
-    }
+        DrawRoomsFuture[currentRoom]();
     
-    
-}
-
-void DrawPuzzle1Past()
-{
-    //DrawText("PAST PUZZLE LEVEL 1", 300, SCREEN_HEIGHT/2, 20, WHITE);
-    
-    // RECTANGLE ROTATION
-    Vector2 origin = {60, 60};
-
-    float width = 120;
-    
-    Rectangle drawRect = {box.position.x, box.position.y, width, 120};
-    
-    if(box.flipped)
-        DrawRectanglePro(
-            drawRect,
-            origin,
-            box.rotation,
-            BLUE
-        );
-    else 
-        DrawRectanglePro(
-            drawRect,
-            origin,
-            box.rotation,
-            RED
-        );
-    
-    center = box.position;
-    
-}
-
-void DrawPuzzle1Future()
-{
-    DrawText("FUTURE PUZZLE LEVEL 1", 100, 20, 20, WHITE);
-    
-    DrawKeypad();
-    
-    if (passwordEntered && passwordCorrect)
-    {
-        DrawText("Correct", 450, 180, 40, GREEN);
-    }
-    else if (passwordEntered && !passwordCorrect)
-    {
-        DrawText("False", 450, 180, 40, RED);
+        DrawRoomUI();
     }
 }
 
-void DrawKeypad()
+
+void HandleRoomUI(int *currentRoom, int totalRoom)
 {
-    for (int i = 0; i < 9; i++)
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenHeight();
+
+    int btnWidth = 80;
+    int btnHeight = 50;
+    int margin = 20;
+
+    Rectangle prevBtn = {
+        margin,
+        screenHeight/2 - btnHeight/2,
+        btnWidth,
+        btnHeight
+    };
+
+    Rectangle nextBtn = {
+        screenWidth - btnWidth - margin,
+        screenHeight/2 - btnHeight/2,
+        btnWidth,
+        btnHeight
+    };
+
+    Vector2 mouse = GetMousePosition();
+
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
     {
-        int row = i / 3;
-        int col = i % 3;
-
-        keypad[i].bounds = (Rectangle){
-            startXkeypad + col * (size + gap),
-            startYkeypad + row * (size + gap),
-            size,
-            size
-        };
-
-        keypad[i].value = numbers[i];
-    }
-
-    // tombol 0
-    keypad[9].bounds = (Rectangle){
-        startXkeypad + size + gap,
-        startYkeypad + 3 * (size + gap),
-        size,
-        size
-    };
-    keypad[9].value = 0;
-    
-    // tombol delete
-    keypad[10].bounds = (Rectangle){
-        startXkeypad,
-        startYkeypad + 3 * (size + gap),
-        size,
-        size
-    };
-    keypad[10].value = 'x';
-    
-    // tombol enter
-    keypad[11].bounds = (Rectangle){
-        startXkeypad + 2 * (size + gap),
-        startYkeypad + 3 * (size + gap),
-        size,
-        size
-    };
-    keypad[11].value = 'o';
-    
-    for (int i = 0; i < 12; i++)
-    {
-        DrawRectangleRec(keypad[i].bounds, DARKGRAY);
-        DrawRectangleLinesEx(keypad[i].bounds, 2, WHITE);
-
-        char num[2];
-        
-        if (i > 9)
+        if (CheckCollisionPointRec(mouse, prevBtn))
         {
-            num[0] = keypad[i].value;
-            num[1] = '\0';
-        }
-        else
-        {
-            sprintf(num, "%d", keypad[i].value);
+            if (*currentRoom > 0)
+                (*currentRoom)--;
         }
 
-        DrawText(
-            num,
-            keypad[i].bounds.x + 25,
-            keypad[i].bounds.y + 20,
-            30,
-            WHITE
-        );
+        if (CheckCollisionPointRec(mouse, nextBtn))
+        {
+            if (*currentRoom < totalRoom - 1)
+                (*currentRoom)++;
+        }
     }
-    DrawText(password, 340, 180, 40, WHITE);
-    
 }
 
+void DrawRoomUI()
+{
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenHeight();
+
+    int btnWidth = 80;
+    int btnHeight = 50;
+    int margin = 20;
+
+    // Tombol PREV (kiri)
+    Rectangle prevBtn = {
+        margin,
+        screenHeight/2 - btnHeight/2,
+        btnWidth,
+        btnHeight
+    };
+
+    // Tombol NEXT (kanan)
+    Rectangle nextBtn = {
+        screenWidth - btnWidth - margin,
+        screenHeight/2 - btnHeight/2,
+        btnWidth,
+        btnHeight
+    };
+
+    // DRAW PREV
+    DrawRectangleRec(prevBtn, DARKGRAY);
+    DrawRectangleLinesEx(prevBtn, 2, WHITE);
+
+    DrawText(
+        "<",
+        prevBtn.x + btnWidth/2 - 5,
+        prevBtn.y + 10,
+        30,
+        WHITE
+    );
+
+    // DRAW NEXT
+    DrawRectangleRec(nextBtn, DARKGRAY);
+    DrawRectangleLinesEx(nextBtn, 2, WHITE);
+
+    DrawText(
+        ">",
+        nextBtn.x + btnWidth/2 - 5,
+        nextBtn.y + 10,
+        30,
+        WHITE
+    );
+}
 
 void UnloadPuzzle1Scene()
 {

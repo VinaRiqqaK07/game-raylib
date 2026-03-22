@@ -17,3 +17,4 @@ void InitScene(GameScene scene);
 void UpdateScene();
 void DrawScene();
 void ChangeScene(GameScene newScene);
+void UnloadScene(GameScene scene);

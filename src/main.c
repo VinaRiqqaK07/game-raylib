@@ -22,17 +22,17 @@ int main(void)
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
-        // Update variables
-        UpdateScene();
+        
         
         // Draw
-        
         BeginDrawing();
         
             DrawScene();
             
         EndDrawing();
         //----------------------------------------------------------------------------------
+        // Update variables
+        UpdateScene();
     }
 
     // De-Initialization

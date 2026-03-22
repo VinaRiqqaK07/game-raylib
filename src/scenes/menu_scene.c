@@ -49,7 +49,7 @@ void UpdateMenuScene()
     if(startClicked)
     {
         DeleteSave();
-        UnloadMenuScene();     
+        ChangeScene(SELECT_ROLE);     
     }
     
     if(continueClicked)
@@ -90,6 +90,6 @@ void DrawMenuScene()
 
 void UnloadMenuScene()
 {
-    ChangeScene(SELECT_ROLE);
+    
 }
 

@@ -118,7 +118,7 @@ void ShowPast()
     if (buttonClicked)
     {
         game.role = ROLE_PAST;
-        UnloadRoleScene();
+        ChangeScene(SCENE_INTRO);
     }
 }
 
@@ -142,7 +142,7 @@ void ShowFuture()
     if (buttonClicked)
     {
         game.role = ROLE_FUTURE;
-        UnloadRoleScene();
+        ChangeScene(SCENE_INTRO);
     }
 }
 
@@ -150,5 +150,5 @@ void ShowFuture()
 
 void UnloadRoleScene()
 {
-    ChangeScene(SCENE_INTRO);
+    
 }

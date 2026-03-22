@@ -1,4 +1,5 @@
 #include "scene_manager.h"
+#include "game.h"
 #include "../scenes/menu_scene.h" 
 #include "../scenes/selectrole_scene.h"
 #include "../scenes/intro_scene.h"
@@ -8,6 +9,8 @@ GameScene currentScene;
 
 void ChangeScene(GameScene newScene)
 {
+    UnloadScene(currentScene);
+    
     currentScene = newScene;
     InitScene(currentScene);
 }
@@ -107,5 +110,27 @@ void DrawScene()
         case SCENE_FINAL:
             DrawFinalScene();
             break;*/
+    }
+}
+
+void UnloadScene(GameScene scene)
+{
+    switch(scene)
+    {
+        case SCENE_MENU:
+            UnloadMenuScene();
+            break;
+            
+        case SELECT_ROLE:
+            UnloadRoleScene();
+            break;
+            
+        case SCENE_INTRO:
+            UnloadIntroScene();
+            break;
+
+        case SCENE_PUZZLE1:
+            UnloadPuzzle1Scene();
+            break;
     }
 }

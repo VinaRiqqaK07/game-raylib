@@ -4,103 +4,113 @@
 #include "../core/scene_manager.h"
 #include "../core/game.h"
 #include "../systems/save_system.h"
+#include "../systems/caption_system.h"
 
-#define SPRITE_COUNT 4
-#define SPAWN_DELAY 10.0f
-#define FADE_TIME 3.0f
+#define TOTAL_DIALOGUE 6
 
-float timer = 0;
-float scaleSprite = 0.1f;
-bool introFinish = false;
-Texture2D placeholder;
-Vector2 spritePositions[SPRITE_COUNT];
-bool isTransitioning = false;
+Texture2D background, computerMouse;
+Rectangle sourceBackground, destBackground;
+float timerIntro = 0;
+int dialogueIndex = 0;
+
+Caption captionIntro;
+
+Rectangle computerRec = {840, 300, 210, 200};
+bool computerOpen = false;
+bool computerCaptionFinish = false;
 
 void InitIntroScene()
 {
-    placeholder = LoadTexture("../assets/placeholder.jpg");
-
-    float startX = 100;
-    float y = 100;
+    background = LoadTexture("../assets/intro_future.png");
+    computerMouse = LoadTexture("../assets/intro-computer.png");
     
-    spritePositions[0] = (Vector2){
-        startX,
-        y
-    };
-    spritePositions[1] = (Vector2){
-        startX + (placeholder.width * scaleSprite)/1.5,
-        y - 20
-    };
-    spritePositions[2] = (Vector2){
-        startX + (placeholder.width * scaleSprite)-100,
-        y + (placeholder.height * scaleSprite)
-    };
-    spritePositions[3] = (Vector2){
-        startX + (placeholder.width * scaleSprite * 1.5),
-        y + placeholder.height * scaleSprite/1.3
-    };
-
+    sourceBackground = (Rectangle){0, 0, background.width, background.height};
+    destBackground = (Rectangle){0, 0,  SCREEN_WIDTH, SCREEN_HEIGHT};
+    
+    InitCaptionSystem(&captionIntro);
 }
 
 void UpdateIntroScene()
 {
-    timer += GetFrameTime();
-
-    if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-    {
-        int currentIndex = timer / SPAWN_DELAY;
-
-        if(currentIndex < SPRITE_COUNT - 1)
-        {
-            timer = (currentIndex + 1) * SPAWN_DELAY;
-        }   
-    }
+    timerIntro += GetFrameTime();
     
-    if(timer > 30.0f)
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
     {
-        if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) || timer >= 33.0f)
+        if (CheckCollisionPointRec(GetMousePosition(), computerRec) && timerIntro >= 6.0f)
         {
-            game.currentLevel = 1;
-            SaveGameFunc();
-
-            ChangeScene(SCENE_PUZZLE1);
+            computerOpen = true;
+            if (!computerCaptionFinish)
+            {
+                timerIntro = 0.0f;
+            }
+        }
+        else if (computerOpen)
+        {
+            computerOpen = false;
         }
     }
     
+    if (dialogueIndex == 0 && timerIntro >= 0.0f)
+    {
+        ShowCaption(&captionIntro, "Future : It's... her room. All of it.. Frozen.", 3.0f);
+        dialogueIndex++;
+    }
+    else if (dialogueIndex == 1 && timerIntro >= 3.0f)
+    {
+        ShowCaption(&captionIntro, "Future : I remember this... and yet it's all wrong.", 3.0f);
+        dialogueIndex++;
+    }
+    else if (dialogueIndex == 2 && timerIntro >= 6.0f)
+    {
+        ShowCaption(&captionIntro, "Future : I can reach the past... maybe I can save her.", 3.0f);
+        dialogueIndex++;
+    }
     
+    if (computerOpen && !computerCaptionFinish)
+    {
+        if(dialogueIndex == 3 && timerIntro > 0.5f)
+        {
+            ShowCaption(&captionIntro, "Future : Can you hear me?", 2.5f);
+            dialogueIndex++;
+        }
+        else if (dialogueIndex == 4 && timerIntro >= 3.0f)
+        {
+            ShowCaption(&captionIntro, "Past : ...Who is this? Wait... my own voice?", 4.0f);
+            dialogueIndex++;
+        }
+        else if (dialogueIndex == 5 && timerIntro >= 7.0f)
+        {
+            ShowCaption(&captionIntro, "Future : I'm you... from 20 years ahead. We have to fix things.", 4.0f);
+            dialogueIndex++;
+            computerCaptionFinish = true;
+        }
+    }
+    UpdateCaption(&captionIntro);
     
+    if (computerCaptionFinish && timerIntro >=12.0f)
+    {
+        ChangeScene(SCENE_PUZZLE1);
+    }
 }
 
 void DrawIntroScene()
 {
     ClearBackground(BLACK);
-
-    for(int i = 0; i < SPRITE_COUNT; i++)
+    if (computerOpen)
     {
-        float spawnTime = i * SPAWN_DELAY;
-
-        if(timer >= spawnTime)
-        {
-            float timeSinceSpawn = timer - spawnTime;
-
-            float alpha = 1.0f;
-
-            if(timeSinceSpawn < FADE_TIME)
-                alpha = timeSinceSpawn / FADE_TIME;
-
-            Color tint = Fade(WHITE, alpha);
-
-            // ROTATION
-            float rotation = (i % 2 == 0) ? -10.0f : 10.0f;
-            
-            //void DrawTextureEx(Texture2D texture, Vector2 position, float rotation, float scale, Color tint)
-            
-            DrawTextureEx(placeholder, spritePositions[i], rotation, 0.1f, tint);
-        }
+        DrawTextureEx(computerMouse, (Vector2){SCREEN_WIDTH/2 - computerMouse.width/2 * 0.5, 100}, 0.0f, 0.5f, WHITE);
     }
+    else
+    {
+        DrawTexturePro(background, sourceBackground, destBackground, (Vector2){0,0}, 0.0f, WHITE);
+    }
+    //DrawRectangleRec(computerRec, WHITE);
+    
+    DrawCaption(&captionIntro);
 }
 
 void UnloadIntroScene()
 {
-    UnloadTexture(placeholder);
+    UnloadTexture(background);
+    UnloadTexture(computerMouse);
 }

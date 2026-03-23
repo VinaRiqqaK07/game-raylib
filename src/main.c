@@ -23,7 +23,8 @@ int main(void)
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
         
-        
+        // Update variables
+        UpdateScene();
         // Draw
         BeginDrawing();
         
@@ -31,8 +32,7 @@ int main(void)
             
         EndDrawing();
         //----------------------------------------------------------------------------------
-        // Update variables
-        UpdateScene();
+        
     }
 
     // De-Initialization

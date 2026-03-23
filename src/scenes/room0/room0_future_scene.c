@@ -25,7 +25,7 @@ void UpdateRoom0Future()
 void DrawRoom0Future()
 {
     DrawTexturePro(introRoomFuture,sourceRoomFuture,destRoomFuture,(Vector2){0,0},0.0f,WHITE);
-    DrawText("FUTURE ROOM 0", 200, 150, 20, WHITE);
+    //DrawText("FUTURE ROOM 0", 200, 150, 20, WHITE);
 }
 
 void UnloadRoom0Future()

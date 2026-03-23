@@ -45,6 +45,7 @@ void (*InitRoomsFuture[TOTAL_ROOM])() = {
     InitRoom3Future,
     InitRoom4Future
 };
+
 void (*UpdateRoomsFuture[TOTAL_ROOM])() = {
     UpdateRoom0Future,
     UpdateRoom1Future,

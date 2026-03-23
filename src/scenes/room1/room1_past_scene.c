@@ -8,6 +8,7 @@
 
 #define BOX_COUNT 3
 Box boxes[BOX_COUNT];
+
 int activeBoxIndex = -1;
 
 Texture2D table, simbol1, simbol2, simbol3, digit1, digit2, digit3, noteclue;

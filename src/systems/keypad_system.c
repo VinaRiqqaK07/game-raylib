@@ -59,16 +59,15 @@ void InitKeypad(Keypad *kp)
     kp->passLength = 0;
     kp->password[0] = '\0';
 
-    kp->opening = false;
-    kp->isOpen = false;
+    //kp->opening = false;
+    //kp->isOpen = false;
     
-    kp->startXkeypad = 300;
-    kp->startYkeypad = 250;
-    kp->size = 70;
-    kp->gap = 10;
+    kp->startXkeypad = 520;
+    kp->startYkeypad = 310;
+    kp->size = 30;
+    kp->gap = 30;
 
-    //kp->panel = (Rectangle){140, 345, 78, 100}; // INI JI NANTI DIHAPUS
-    kp->target = (Rectangle){300, 250, 240, 320};
+    kp->target = (Rectangle){500, 310, 320, 320};
     kp->start = kp->panel;
 
     kp->closeButton = (Rectangle){
@@ -139,6 +138,20 @@ void HandleUpdateKeypad(Keypad *kp)
                         kp->password[kp->passLength++] = '0' + kp->button[i].value;
                         kp->password[kp->passLength] = '\0';
                     }
+                    
+                    if (kp->passLength == kp->maxLength)
+                    {
+                        kp->passwordEntered = true;
+                        if (strcmp(kp->password, kp->correctPassword) == 0 || kp->passwordCorrect == true)
+                        {
+                            kp->passwordCorrect = true;
+                            
+                        }
+                        else
+                        {
+                            kp->passwordCorrect = false;
+                        }
+                    }
                 }
             }
         }
@@ -191,16 +204,10 @@ void UpdateKeypad(Keypad *kp)
 
 void DrawKeypad(Keypad *kp)
 {
-    DrawRectangleRec(kp->closeButton, MAROON);
-    DrawRectangleLinesEx(kp->closeButton, 2, WHITE);
+    //DrawRectangleRec(kp->closeButton, MAROON);
+    //DrawRectangleLinesEx(kp->closeButton, 2, WHITE);
 
-    DrawText(
-        "X",
-        kp->closeButton.x + 8,
-        kp->closeButton.y + 4,
-        20,
-        WHITE
-    );
+    //DrawText("X",kp->closeButton.x + 8,kp->closeButton.y + 4, 20, WHITE);
     
     for (int i = 0; i < 9; i++)
     {
@@ -208,9 +215,9 @@ void DrawKeypad(Keypad *kp)
         int col = i % 3;
 
         kp->button[i].bounds = (Rectangle){
-            kp->startXkeypad + col * (kp->size + kp->gap),
+            kp->startXkeypad + col * (kp->size + 30 + kp->gap),
             kp->startYkeypad + row * (kp->size + kp->gap),
-            kp->size,
+            kp->size + 30,
             kp->size
         };
 
@@ -219,9 +226,9 @@ void DrawKeypad(Keypad *kp)
 
     // tombol 0
     kp->button[9].bounds = (Rectangle){
-        kp->startXkeypad + kp->size + kp->gap,
+        kp->startXkeypad + kp->size + 30 + kp->gap,
         kp->startYkeypad + 3 * (kp->size + kp->gap),
-        kp->size,
+        kp->size + 30,
         kp->size
     };
     kp->button[9].value = 0;
@@ -230,24 +237,24 @@ void DrawKeypad(Keypad *kp)
     kp->button[10].bounds = (Rectangle){
         kp->startXkeypad,
         kp->startYkeypad + 3 * (kp->size + kp->gap),
-        kp->size,
+        kp->size + 30,
         kp->size
     };
     kp->button[10].value = 'x';
     
     // tombol enter
     kp->button[11].bounds = (Rectangle){
-        kp->startXkeypad + 2 * (kp->size + kp->gap),
+        kp->startXkeypad + 2 * (kp->size + 30 + kp->gap),
         kp->startYkeypad + 3 * (kp->size + kp->gap),
-        kp->size,
+        kp->size + 30,
         kp->size
     };
     kp->button[11].value = 'v';
     
     for (int i = 0; i < 12; i++)
     {
-        DrawRectangleRec(kp->button[i].bounds, DARKGRAY);
-        DrawRectangleLinesEx(kp->button[i].bounds, 2, WHITE);
+        //DrawRectangleRec(kp->button[i].bounds, DARKGRAY);
+        //DrawRectangleLinesEx(kp->button[i].bounds, 2, WHITE);
 
         char num[2];
         
@@ -255,31 +262,29 @@ void DrawKeypad(Keypad *kp)
         {
             num[0] = kp->button[i].value;
             num[1] = '\0';
+            DrawRectangleRec(kp->button[i].bounds, DARKGRAY);
+            DrawRectangleLinesEx(kp->button[i].bounds, 2, WHITE);
+            DrawText(num, kp->button[i].bounds.x + 25,kp->button[i].bounds.y, 20, WHITE );
         }
         else
         {
             sprintf(num, "%d", kp->button[i].value);
         }
 
-        DrawText(
-            num,
-            kp->button[i].bounds.x + 25,
-            kp->button[i].bounds.y + 20,
-            30,
-            WHITE
-        );
+       
     }
-    DrawRectangleRec((Rectangle){kp->startXkeypad, kp->startYkeypad - (kp->size + 10), 3 * (kp->size + kp->gap), 60}, DARKGRAY);
-    DrawRectangleLinesEx((Rectangle){kp->startXkeypad, kp->startYkeypad - (kp->size + 10), 3 * (kp->size + kp->gap), 60}, 3, WHITE);    
-    DrawText(kp->password, kp->startXkeypad + 10, kp->startYkeypad - (kp->size), 40, WHITE);
+    
+    //DrawRectangleRec((Rectangle){kp->startXkeypad, kp->startYkeypad - (kp->size + 55 + 10), 3 * (kp->size + kp->gap), 60}, DARKGRAY);
+    //DrawRectangleLinesEx((Rectangle){kp->startXkeypad, kp->startYkeypad - (kp->size + 55 + 10), 3 * (kp->size + kp->gap), 60}, 3, WHITE);    
+    DrawText(kp->password, kp->startXkeypad + 10, kp->startYkeypad - (kp->size + 55), 40, WHITE);
     
     if (kp->passwordEntered && kp->passwordCorrect)
     {
-        DrawText("Correct", kp->startXkeypad + 4 * (kp->size + kp->gap), kp->startYkeypad - (kp->size + kp->gap), 40, GREEN);
+        DrawText("Correct", kp->startXkeypad + 4 * (kp->size + kp->gap + 10), kp->startYkeypad - (kp->size + 55), 40, GREEN);
     }
     else if (kp->passwordEntered && !(kp->passwordCorrect))
     {
-        DrawText("False", kp->startXkeypad + 4 * (kp->size + kp->gap), kp->startYkeypad - (kp->size + kp->gap), 40, RED);
+        DrawText("False", kp->startXkeypad + 4 * (kp->size + kp->gap + 10), kp->startYkeypad - (kp->size + 55), 40, RED);
     }
     
 }

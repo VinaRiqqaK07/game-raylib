@@ -77,8 +77,11 @@ void DrawCaption(Caption *cap)
     if (cap->active)
     {
         DrawRectangle(0, SCREEN_HEIGHT - 150, SCREEN_WIDTH, 150, Fade(WHITE, 0.6f * cap->alpha));
-    
+        
+        
         DrawText(cap->text, SCREEN_WIDTH/2 - (cap->textWidth)/2, SCREEN_HEIGHT - 100, 30, Fade(BLACK, cap->alpha));
+       
+        //DrawTextRec(GetFontDefault(), cap->text, (Rectangle){SCREEN_WIDTH/2 - 250, SCREEN_HEIGHT - 100, SCREEN_WIDTH/2, 120}, 30, 2, true, Fade(BLACK, cap->alpha));
         
         //DrawText(cap->text, 100, 200, 30, Fade(BLACK, cap->alpha));
         //DrawText("Draw caption called text active", 200, 150, 20, WHITE);

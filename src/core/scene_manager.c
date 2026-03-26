@@ -10,7 +10,7 @@
  * 
  *
  * Dependencies:
- * - ../scenes/*.h (every header file for scene needed)
+ * - ../scenes/{all}.h (every header file for scene needed)
  *
  */
 

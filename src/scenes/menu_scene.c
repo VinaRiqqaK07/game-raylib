@@ -1,3 +1,16 @@
+/**
+ * File: menu_scene.c
+ * Description:
+ * Handles the logic and rendering for Start Menu game.
+ * This room contains title and button to start game or continue if saved file exist.
+ *
+ * Responsibilities:
+ * - Initialize text and button positions
+ * - Handle button logic interaction for start and continue
+ * - Render title and button
+ *
+ */
+
 #include "menu_scene.h"
 #include "../utils/constants.h"
 #include "../systems/save_system.h"

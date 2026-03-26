@@ -25,6 +25,7 @@ int main(void)
         
         // Update variables
         UpdateScene();
+        
         // Draw
         BeginDrawing();
         

@@ -1,37 +1,57 @@
+/**
+ * Keypad System
+ *
+ * Displays and handle Logic for keypad such as keyboard and mouse input, keypad popup, and checking password.
+ *
+ * Usage:
+ * 1. Call InitKeypad() once with initialized Keypad Pointer (correct password, maxLength, and panel)
+ * 2. Call UpdateKeypad() every frame
+ * 3. Call DrawKeypad() in render loop with if statement keypad rendered fully
+ *
+ */
+
 #include "raylib.h"
 #include <stdio.h>
 #include <string.h>
 
+/**
+ * Represents each keypad button, consists of its value/text on the button and its area
+ */
 typedef struct {
     Rectangle bounds;
     int value;
 } KeypadButton;
 
+/**
+ * Represents an interactive keypad with its logic and render item
+ */
 typedef struct {
-    char password[10];
-    int passLength;
-    int maxLength;
+    char password[10];          // Password inputted
+    int passLength;             // Current Length of inputted password
+    int maxLength;              // Max Length of password
 
-    bool isOpen;
-    bool opening;
+    bool isOpen;                // Is keypad opened
+    bool opening;               // Is keypad in open transition
     
-    int startXkeypad;
-    int startYkeypad;
-    int size;
-    int gap;
+    int startXkeypad;           // X coordinate where the keypad start
+    int startYkeypad;           // Y coordinate where the keypad start
+    int size;                   // Size of each button
+    int gap;                    // Gap for each item
 
-    Rectangle panel;
-    Rectangle target;
-    Rectangle start;
-    Rectangle closeButton;
-    KeypadButton button[12];
+    Rectangle panel;            // Keypad panel
+    Rectangle target;           // Target position for keypad panel
+    Rectangle start;            // Start position of keypad panel
+    Rectangle closeButton;      // Close button of keypad
+    KeypadButton button[12];    // All button in keypad
 
-    bool passwordEntered;
-    bool passwordCorrect;
+    bool passwordEntered;       // Is password entered
+    bool passwordCorrect;       // Is password correct
 
-    const char *correctPassword;
+    const char *correctPassword; //Correct password
 } Keypad;
 
+
+// Numbers in keypad
 int numbers[10] = {1,2,3,4,5,6,7,8,9,0};
 
 void InitKeypad(Keypad *kp)

@@ -1,3 +1,19 @@
+/**
+ * File: game.c
+ * Description:
+ * Stores game state and other game configuration. Will be used for saving data.
+ *
+ * Responsibilities:
+ * - Initialize game state
+ * - Called in other part of game to store updated value of game state
+ * - Reset game state
+ *
+ * 
+ *
+ * 
+ */
+
+
 #include "raylib.h"
 #include "game.h"
 

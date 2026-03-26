@@ -2,6 +2,9 @@
 
 #include "raylib.h"
 
+/**
+ * Represents an iterative scene that can be rendered
+ */
 typedef enum GameScene {
     SCENE_MENU,
     SELECT_ROLE,

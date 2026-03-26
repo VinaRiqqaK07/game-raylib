@@ -1,3 +1,14 @@
+/**
+ * File: album_scene.c
+ * Description:
+ * Handles the logic and rendering for Album Update upon completing puzzle.
+ *
+ *
+ * STILL UNDER DEVELOPMENT (NOT FINISHED YET)
+ *
+ *
+ */
+
 #include "raylib.h"
 #include "album_scene.h"
 #include "../utils/constants.h"

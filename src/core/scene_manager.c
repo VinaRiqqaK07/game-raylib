@@ -1,5 +1,20 @@
+/**
+ * File: scene_manager.c
+ * Description:
+ * Handles all the logic from Initialize, Update, Draw, and Unload for every scene.
+ * This file is the one called from main.c, the main bridge between main file with every scene.
+ *
+ * Responsibilities:
+ * - Managing which scene to get Initialized, Updated, and Draw. 
+ * - Handle scene switching and unloading scene.
+ * 
+ *
+ * Dependencies:
+ * - ../scenes/*.h (every header file for scene needed)
+ *
+ */
+
 #include "scene_manager.h"
-#include "game.h"
 #include "../scenes/menu_scene.h" 
 #include "../scenes/selectrole_scene.h"
 #include "../scenes/intro_scene.h"

@@ -1,3 +1,22 @@
+/**
+ * File: puzzle1_scene.c
+ * Description:
+ * Handles the logic and rendering for all room in puzzle gameplay.
+ * This file acts as a manager for every room consisting different puzzle.
+ *
+ * Responsibilities:
+ * - Initialize textures and sheet positions
+ * - Handle drag interaction using Box system
+ * - Render piano background and sheet objects
+ *
+ * Dependencies:
+ * - box.h (for draggable objects)
+ * - scene_manager.h (for scene control)
+ *
+ * Notes:
+ * - Uses randomized initial positions for variation
+ */
+
 #include "raylib.h"
 #include "puzzle1_scene.h"
 #include "../core/game.h"
@@ -61,8 +80,12 @@ void (*DrawRoomsFuture[TOTAL_ROOM])() = {
     DrawRoom4Future
 };
 
+/*
+* Initialize all room based on role selected
+*/
 void InitPuzzle1Scene()
 {
+    
     if (game.role == ROLE_PAST)
     {
         for(int i = 0; i < TOTAL_ROOM; i++)
@@ -79,6 +102,9 @@ void InitPuzzle1Scene()
     }
 }
 
+/*
+* Choose a correct Update function based on current Room on screen
+*/
 void UpdatePuzzle1Scene()
 {
     if (game.role == ROLE_PAST)
@@ -95,6 +121,9 @@ void UpdatePuzzle1Scene()
     }
 }
 
+/*
+* Choose a correct Draw function based on current Room on screen
+*/
 void DrawPuzzle1Scene()
 {
     ClearBackground(BLACK);
@@ -113,7 +142,9 @@ void DrawPuzzle1Scene()
     }
 }
 
-
+/*
+* A function to handles switching room logic
+*/
 void HandleRoomUI(int *currentRoom, int totalRoom)
 {
     int screenWidth = GetScreenWidth();
@@ -155,6 +186,9 @@ void HandleRoomUI(int *currentRoom, int totalRoom)
     }
 }
 
+/*
+* A function to draw switching room button
+*/
 void DrawRoomUI()
 {
     int screenWidth = GetScreenWidth();
@@ -164,7 +198,7 @@ void DrawRoomUI()
     int btnHeight = 50;
     int margin = 20;
 
-    // Tombol PREV (kiri)
+    // PREV Button (left)
     Rectangle prevBtn = {
         margin,
         screenHeight/2 - btnHeight/2,
@@ -172,7 +206,7 @@ void DrawRoomUI()
         btnHeight
     };
 
-    // Tombol NEXT (kanan)
+    // NEXT Button (Right)
     Rectangle nextBtn = {
         screenWidth - btnWidth - margin,
         screenHeight/2 - btnHeight/2,

@@ -1,23 +1,57 @@
+/**
+ * File: box.c
+ * Description:
+ * Handles the logic and rendering for interactable object (drag, rotate, flip).
+ *
+ * Usage : 
+ * 1. Call UpdateBox() every frame
+ * 2. Call DrawBox() in render loop
+ *
+ * Dependencies:
+ * - math.h (for rotation function)
+ *
+ */
+
 #include "raylib.h"
 #include <math.h>
 
-typedef struct {
-    Vector2 position;
-    float targetWidth;
-    float rotation;
-    bool flipped;
 
-    bool dragging;
-    bool rotating;
-    Vector2 dragOffset;
+/**
+* Represents an interactive draggable object.
+* Supports rotation, flipping, and drag mechanics.
+*/
+typedef struct {
+    Vector2 position;           // Current position on screen
+    float targetWidth;          // Render size (scaled width)
+    float rotation;             // Rotation angle in degrees
+    bool flipped;               // Whether texture is flipped or not
+
+    bool dragging;              // Is currently being dragged
+    bool rotating;              // Is currently being rotated
+    Vector2 dragOffset;         // Offset between mouse and object center for drag
     
-    Texture2D textureTop;
-    Texture2D textureBottom;
+    Texture2D textureTop;       // Texture rendered when not flipped
+    Texture2D textureBottom;    // Texture rendered when flipped
 } Box;
 
 float widthBox, heightBox;
 float margin = 50;
 
+/**
+ * Updates the interaction logic for a Box.
+ *
+ * Handles:
+ * - Dragging (inside inner hitbox)
+ * - Rotation (outside inner but inside outer hitbox)
+ * - Flipping (right click)
+ *
+ * @param box Pointer to the Box object to update
+ *
+ * Behavior:
+ * - Left click inside inner area → drag
+ * - Left click outside → rotate
+ * - Right click → flip texture
+ */
 void UpdateBox(Box *box)
 {
     Rectangle inner = {
@@ -86,6 +120,17 @@ void UpdateBox(Box *box)
     }
 }
 
+/**
+ * Draw/Render Item.
+ *
+ * 
+ * @param box Pointer to the Box object to draw
+ *
+ * Responsibilities :
+ * - Render selected texture based on item state (flipped or not)
+ * - Scale item height based on width target.
+ * - Draw texture using DrawTexturePro().
+ */
 void DrawBox(Box *box)
 {
     Texture2D tex = box->flipped ? box->textureBottom : box->textureTop;
@@ -112,6 +157,8 @@ void DrawBox(Box *box)
     };
 
     DrawTexturePro(tex,source,dest,origin,box->rotation,WHITE);
+    
+    // Debugging Text
     //DrawText(TextFormat("X: %.0f Y: %.0f", box->position.x, box->position.y),box->position.x,box->position.y - 100,20,WHITE);
 }
 

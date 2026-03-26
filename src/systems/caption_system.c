@@ -1,16 +1,35 @@
+/**
+ * Caption System
+ *
+ * Displays narrative text with fade-in and fade-out animation.
+ *
+ * Usage:
+ * 1. Call InitCaptionSystem() once
+ * 2. Call ShowCaption() to trigger a caption
+ * 3. Call UpdateCaption() every frame
+ * 4. Call DrawCaption() in render loop
+ *
+ * Notes:
+ * - Uses timer-based animation
+ * - Only one caption active at a time
+ */
 #include "raylib.h"
 #include "../utils/constants.h"
 
+/**
+ * Represents a caption structure that supports fade-in
+ * fade-out animation and duration.
+ */
 typedef struct {
-    const char *text;
-    int textWidth;
+    const char *text;   // Text to be rendered
+    int textWidth;      // Width of the text
 
-    float timer;
-    float duration;
+    float timer;        // text timer/inner clock
+    float duration;     // the duration text will be displayed
 
-    bool active;
+    bool active;        // Is caption active or not
 
-    float alpha; 
+    float alpha;        // Text visibility
 } Caption;
 
 void InitCaptionSystem(Caption *cap)

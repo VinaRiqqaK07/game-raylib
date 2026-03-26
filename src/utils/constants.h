@@ -1,3 +1,11 @@
+/**
+ * Constants Header
+ *
+ * Stores constants value that can be used throughout code base
+ *
+ *
+ */
+
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 

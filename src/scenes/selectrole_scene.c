@@ -1,3 +1,13 @@
+/**
+ * File: selectrole_scene.c
+ * Description:
+ * Handles the logic and rendering for Selecting Role.
+ * This scene contains two selection of role and description for each role.
+ *
+ * If role is selected, the game state for role will be updated.
+ *
+ */
+
 #include "raylib.h"
 #include "selectrole_scene.h"
 #include "../utils/constants.h"

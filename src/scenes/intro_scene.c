@@ -1,3 +1,19 @@
+/**
+ * File: intro_scene.c
+ * Description:
+ * Handles the logic and rendering for Intro Scene before entering gameplay.
+ * This room contains background assets (not finished asset yet) with interactable computer area.
+ *
+ * Responsibilities:
+ * - Initialize textures and interactable area
+ * - Handle caption render and interactive
+ *
+ * Dependencies:
+ * - ../systems/caption_system.h (for rendering caption)
+ *
+ *
+ */
+
 #include "raylib.h"
 #include "intro_scene.h"
 #include "../utils/constants.h"
@@ -89,6 +105,9 @@ void UpdateIntroScene()
     
     if (computerCaptionFinish && timerIntro >=12.0f)
     {
+        game.currentLevel = 1;
+        SaveGameFunc();
+            
         ChangeScene(SCENE_PUZZLE1);
     }
 }

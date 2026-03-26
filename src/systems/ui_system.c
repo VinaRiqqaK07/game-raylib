@@ -1,3 +1,15 @@
+/**
+ * UI System
+ *
+ * Displays and handle Logic for Button, and draws blur line at selecting role menu.
+ *
+ * Usage:
+ * 1. Call UIButton() whenever button is needed
+ * 2. Call DrawBlurLine() to draw vertical separation
+ * 
+ *
+ */
+
 #include "raylib.h"
 #include <math.h>
 #include "ui_system.h"

@@ -15,10 +15,15 @@
  */
 
 #include "scene_manager.h"
+#include "game.h"
 #include "../scenes/menu_scene.h" 
 #include "../scenes/selectrole_scene.h"
 #include "../scenes/intro_scene.h"
 #include "../scenes/puzzle1_scene.h"
+#include "../scenes/puzzle1/puzzle1_past_scene.h"
+#include "../scenes/puzzle1/puzzle1_future_scene.h"
+#include "../scenes/puzzle2/puzzle2_past_scene.h"
+#include "../scenes/puzzle2/puzzle2_future_scene.h"
 
 GameScene currentScene;
 
@@ -47,7 +52,27 @@ void InitScene(GameScene scene)
             break;
 
         case SCENE_PUZZLE1:
-            InitPuzzle1Scene();
+            if (game.role == ROLE_PAST)
+            {
+                InitPuzzle1PastScene();
+            }
+            else if (game.role == ROLE_FUTURE)
+            {
+                InitPuzzle1FutureScene();
+            }
+            //InitPuzzle1Scene();
+            break;
+            
+        case SCENE_PUZZLE2:
+            if (game.role == ROLE_PAST)
+            {
+                InitPuzzle2PastScene();
+            }
+            else if (game.role == ROLE_FUTURE)
+            {
+                InitPuzzle2FutureScene();
+            }
+            //InitPuzzle1Scene();
             break;
     }
 }
@@ -69,7 +94,27 @@ void UpdateScene()
             break;
 
         case SCENE_PUZZLE1:
-            UpdatePuzzle1Scene();
+            if (game.role == ROLE_PAST)
+            {
+                UpdatePuzzle1PastScene();
+            }
+            else if (game.role == ROLE_FUTURE)
+            {
+                UpdatePuzzle1FutureScene();
+            }
+            //UpdatePuzzle1Scene();
+            break;
+            
+        case SCENE_PUZZLE2:
+            if (game.role == ROLE_PAST)
+            {
+                UpdatePuzzle2PastScene();
+            }
+            else if (game.role == ROLE_FUTURE)
+            {
+                UpdatePuzzle2FutureScene();
+            }
+            //UpdatePuzzle1Scene();
             break;
 
         /*case SCENE_LEVEL2:
@@ -107,7 +152,27 @@ void DrawScene()
             break;
 
         case SCENE_PUZZLE1:
-            DrawPuzzle1Scene();
+            if (game.role == ROLE_PAST)
+            {
+                DrawPuzzle1PastScene();
+            }
+            else if (game.role == ROLE_FUTURE)
+            {
+                DrawPuzzle1FutureScene();
+            }
+            //DrawPuzzle1Scene();
+            break;
+            
+        case SCENE_PUZZLE2:
+            if (game.role == ROLE_PAST)
+            {
+                DrawPuzzle2PastScene();
+            }
+            else if (game.role == ROLE_FUTURE)
+            {
+                DrawPuzzle2FutureScene();
+            }
+            //DrawPuzzle1Scene();
             break;
 
         /*case SCENE_LEVEL2:
@@ -145,7 +210,27 @@ void UnloadScene(GameScene scene)
             break;
 
         case SCENE_PUZZLE1:
-            UnloadPuzzle1Scene();
+            if (game.role == ROLE_PAST)
+            {
+                UnloadPuzzle1PastScene();
+            }
+            else if (game.role == ROLE_FUTURE)
+            {
+                UnloadPuzzle1FutureScene();
+            }
+            //UnloadPuzzle1Scene();
+            break;
+            
+        case SCENE_PUZZLE2:
+            if (game.role == ROLE_PAST)
+            {
+                UnloadPuzzle2PastScene();
+            }
+            else if (game.role == ROLE_FUTURE)
+            {
+                UnloadPuzzle2FutureScene();
+            }
+            //UnloadPuzzle1Scene();
             break;
     }
 }

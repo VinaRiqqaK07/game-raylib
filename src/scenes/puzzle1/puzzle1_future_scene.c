@@ -1,8 +1,9 @@
 #include "raylib.h"
-#include "room0_future_scene.h"
+#include "puzzle1_future_scene.h"
 #include "../../utils/constants.h"
 #include "../../core/game.h"
 #include "../../core/scene_manager.h"
+#include "../../systems/save_system.h"
 #include "../../systems/zoom_system.h"
 #include "../../systems/keypad_system.h"
 #include "../../systems/sequence_system.h"
@@ -27,8 +28,9 @@ int telephoneValue[12] = {9,3,1,9,9,9,9,9,9,2,9,4};
 
 SymbolPuzzle telephoneSequenceP1;
 bool IsPuzzle1FutureComplete = false;
+bool adinput = false;
 
-void InitRoom0Future()
+void InitPuzzle1FutureScene()
 {
     introRoomFuture = LoadTexture("../assets/room0/mainhall-0_room0_future.jpg");
     tiltedPic = LoadTexture("../assets/room0/tilted-pic_room0_future.png");
@@ -65,14 +67,14 @@ void InitRoom0Future()
     }
     
     telephoneSequenceP1.sequence[0] = 1;
-    telephoneSequenceP1.sequence[1] = 1;
-    telephoneSequenceP1.sequence[2] = 2;
-    telephoneSequenceP1.sequence[3] = 3;
-    telephoneSequenceP1.sequence[4] = 4;
-    InitSequencePuzzle(&telephoneSequenceP1);
+    telephoneSequenceP1.sequence[1] = 2;
+    telephoneSequenceP1.sequence[2] = 3;
+    telephoneSequenceP1.sequence[3] = 4;
+    telephoneSequenceP1.sequenceLength = 4;
+    InitSequencePuzzle(&telephoneSequenceP1, 4);
 }
 
-void UpdateRoom0Future()
+void UpdatePuzzle1FutureScene()
 {
     if (zoomFuture.state == ZOOM_IDLE)
     {
@@ -112,12 +114,11 @@ void UpdateRoom0Future()
                 if(CheckCollisionPointRec(mouse, telephoneButton[i].bounds))
                 {
                     AddInput(&telephoneSequenceP1, telephoneButton[i].value);
-                    if(telephoneButton[i].value == 1)
-                    {
-                        AddInput(&telephoneSequenceP1, telephoneButton[i].value);
-                    }
+                    adinput = true;
                 }
+                
             }
+            
             
         }
     }
@@ -139,13 +140,22 @@ void UpdateRoom0Future()
         if (IsPuzzle1FutureComplete)
         {
             InitZoomSystem(&zoomFuture, introRoomFuture);
+            //ChangeScene(SCENE_PUZZLE2);
         }
+    }
+    
+    if (IsPuzzle1FutureComplete && zoomFuture.state == ZOOM_IDLE)
+    {
+        game.currentLevel = 2;
+        SaveGameFunc();
+        ChangeScene(SCENE_PUZZLE2);
     }
 }
 
 
-void DrawRoom0Future()
+void DrawPuzzle1FutureScene()
 {
+    ClearBackground(BLACK);
     //DrawTexturePro(introRoomFuture,sourceRoomFuture,destRoomFuture,(Vector2){0,0},0.0f,WHITE);
     //DrawText("FUTURE ROOM 0", 200, 150, 20, WHITE);
     DrawZoomSystem(&zoomFuture);
@@ -165,6 +175,8 @@ void DrawRoom0Future()
         DrawText("PUZZLLE 1 COMPLETE", 200, 150, 20, WHITE);
     }
     
+    //DrawText(TextFormat("InputLength: %d", telephoneSequenceP1.inputLength), 100, 100, 20, RED);
+    
     /*
     for (int i = 0; i < 12; i++)
     {
@@ -175,7 +187,11 @@ void DrawRoom0Future()
     
 }
 
-void UnloadRoom0Future()
+void UnloadPuzzle1FutureScene()
 {
-
+    UnloadTexture(introRoomFuture);
+    UnloadTexture(tiltedPic);
+    UnloadTexture(roundSafe);
+    UnloadTexture(roundSafeKeypad);
+    UnloadTexture(telephoneKeypad);
 }

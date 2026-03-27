@@ -74,6 +74,10 @@ void UpdateMenuScene()
             {
                 ChangeScene(SCENE_PUZZLE1);
             }
+            else if (game.currentLevel == 2)
+            {
+                ChangeScene(SCENE_PUZZLE2);
+            }
         }            
     }
     

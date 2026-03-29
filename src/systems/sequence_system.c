@@ -10,7 +10,7 @@ typedef struct {
     int inputLength;
 
     float timer;
-    float timeout;                 // misalnya 2 detik
+    float timeout;                 // Timeout sequence
 
     bool solved;
 } SymbolPuzzle;
@@ -21,7 +21,7 @@ void InitSequencePuzzle(SymbolPuzzle *p, int length)
     p->sequenceLength = length;
     p->inputLength = 0;
     p->timer = 0.0f;
-    p->timeout = 2.0f;
+    p->timeout = 5.0f;
 
     p->solved = false;
     

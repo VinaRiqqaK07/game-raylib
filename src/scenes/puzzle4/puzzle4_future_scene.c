@@ -1,12 +1,12 @@
 /**
- * File: puzzle3_future_scene.c
+ * File: puzzle4_future_scene.c
  * Description:
- * Handles the logic and rendering for Puzzle 3 FUTURE role Scene.
- * This room contains pictures assets, sequence puzzle, and keypad system.
+ * Handles the logic and rendering for Puzzle 4 FUTURE role Scene.
+ * This room contains pictures assets, interactable item, keypad system, and input field.
  *
  * Responsibilities:
  * - Initialize textures.
- * - Handle zoom system, sequence symbol puzzle, and keypad system.
+ * - Handle assets render, iteractable item, keypad system, and input field as final game milestone.
  *
  *
  *
@@ -23,6 +23,7 @@
 #include "../../objects/box.h"
 #include "../../systems/moments_system.h"
 
+// ======== INITIALIZE ==========
 Box itemSheetBox;
 bool itemSheetBoxActive = false;
 
@@ -35,25 +36,31 @@ bool openKeypadP4 = false;
 
 void InitPuzzle4FutureScene()
 {
+    // ========== LOAD TEXTURE =========================
     bgPuzzle4Future = LoadTexture("../assets/puzzle3/future/background_puzzle3_future.png");
     clue1P4Top = LoadTexture("../assets/puzzle4/future/clue1_puzzle4_future.png");
     symbol4P4 = LoadTexture("../assets/puzzle4/future/symbol4_puzzle4_future.png");
     
+    // ========== INITIALIZE INTERACTABLE OBJECT ==================
     itemSheetBox.textureTop = clue1P4Top;
     itemSheetBox.textureBottom = clue1P4Top;
     itemSheetBox.position = (Vector2){100, 400};
     itemSheetBox.rotation = 0.0f;
     itemSheetBox.targetWidth = 600;
     
+    // ============== INITIALIZE KEYPAD SYSTEM ================
     keypadP4.correctPassword = "2145";
     keypadP4.maxLength = 4;
     keypadP4.panel = keyboardP4Area;
     
     InitKeypad2(&keypadP4);
+    
+    InitMoments();
 }
 
 void UpdatePuzzle4FutureScene()
 {
+    // ========= HANDLE INTERACTABLE OBJECT ===============
     Rectangle hitbox = {
         itemSheetBox.position.x - 300,
         itemSheetBox.position.y - 200,
@@ -79,6 +86,7 @@ void UpdatePuzzle4FutureScene()
         itemSheetBoxActive = false;
     }
     
+    // ============= HANDLE KEYPAD SYSTEM ===============
     if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
     {
         Vector2 mouse = GetMousePosition();
@@ -96,9 +104,7 @@ void UpdatePuzzle4FutureScene()
     
     if (keypadP4.passwordCorrect && !openKeypadP4)
     {
-        //game.currentLevel = 4;
-        //SaveGameFunc();
-        
+        // ======= HANDLE INPUT FIELD ================
         UpdateMoments();
     }
     
@@ -113,9 +119,10 @@ void DrawPuzzle4FutureScene()
     
     DrawTexturePro(symbol4P4, (Rectangle){0, 0, symbol4P4.width, symbol4P4.height}, (Rectangle){100, 450, 200, (200 * symbol4P4.height/symbol4P4.width)}, (Vector2){0, 0}, 0.0f, WHITE);
     
-    //DrawTexturePro(clue1P4Top, (Rectangle){0, 0, clue1P3.width, clue1P3.height}, (Rectangle){130, 100, 700, (700 * clue1P3.height/clue1P3.width)}, (Vector2){0, 0}, 50.0f, WHITE);
+    //====== DRAW INTERACTABLE OBJECT =========
     DrawBox(&itemSheetBox);
     
+    // ===== DRAW KEYPAD & CLUE ===============
     if (openKeypadP4)
     {
         DrawRectangle(0, 0, SCREEN_WIDTH,SCREEN_HEIGHT, Fade(BLACK, 0.7f));
@@ -123,6 +130,7 @@ void DrawPuzzle4FutureScene()
         DrawText("A = 1\nB = 2\nC = 3", 600, 230, 22, WHITE);
     }
     
+    // ===== DRAW INPUT FIELD =============
     if (keypadP4.passwordCorrect && !openKeypadP4)
     {
         DrawMoments();

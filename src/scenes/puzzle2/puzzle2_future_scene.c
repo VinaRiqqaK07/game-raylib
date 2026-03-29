@@ -88,7 +88,7 @@ void UpdatePuzzle2FutureScene()
             TriggerZoom(&zoomFutureP2, shelfFutureP2);
             shelfDetailedP2Open = true;
         }
-        else if(CheckCollisionPointRec(mouse, telephoneAreaP2)&& zoomFutureP2.state == ZOOM_IDLE && !IsPuzzle2FutureComplete)
+        else if(CheckCollisionPointRec(mouse, telephoneAreaP2)&& zoomFutureP2.state == ZOOM_IDLE && !IsPuzzle2FutureComplete && IsConnectP2Complete)
         {
             TriggerZoom(&zoomFutureP2, telephoneP2Detail);
             telephoneP2Showed = true;
@@ -138,26 +138,18 @@ void UpdatePuzzle2FutureScene()
             bgPuzzle2Future = LoadTexture("../assets/puzzle2/mainhall-2_puzzle2_future.jpg");
             InitZoomSystem(&zoomFutureP2, bgPuzzle2Future);
         }
-        
-        //UpdateConnectGrid(&gridPuzzleFutureP2, gridPos);
     }
     
     
     UpdateZoomSystem(&zoomFutureP2);
     
-    if(telephoneP2Showed && !IsPuzzle2FutureComplete)
+    if(telephoneP2Showed && !IsPuzzle2FutureComplete && IsConnectP2Complete)
     {
         UpdateSequencePuzzle(&telephoneSequenceP2);
         IsPuzzle2FutureComplete = SequenceComplete(&telephoneSequenceP2);
-        /*
-        if (IsPuzzle2FutureComplete)
-        {
-            InitZoomSystem(&zoomFutureP2, bgPuzzle2Future);
-            //ChangeScene(SCENE_PUZZLE2);
-        }*/
     }
     
-    if (telephoneSequenceP2.solved && zoomFutureP2.state == ZOOM_IDLE)
+    if (telephoneSequenceP2.solved)
     {
         game.currentLevel = 3;
         SaveGameFunc();
@@ -170,23 +162,15 @@ void UpdatePuzzle2FutureScene()
 void DrawPuzzle2FutureScene()
 {
     ClearBackground(BLACK);
-    //DrawTexturePro(introRoomFuture,sourceRoomFuture,destRoomFuture,(Vector2){0,0},0.0f,WHITE);
-    //DrawText("FUTURE ROOM 0", 200, 150, 20, WHITE);
+    
     DrawZoomSystem(&zoomFutureP2);
-    //DrawText("FUTURE PUZZLE 2", 200, 150, 20, WHITE);
+    
     
     if (shelfDetailedP2Open && zoomFutureP2.state == ZOOMED)
     {
         DrawConnectGrid(&gridPuzzleFutureP2);
     }
-    //DrawRectangleRec(shelfAreaP2, WHITE);
-    /*
-    for (int i = 0; i < 12; i++)
-    {
-        DrawRectangleRec(telephoneButton[i].bounds, WHITE);
-    }*/
     
-    //DrawRectangleRec(telephoneArea, WHITE);
     
 }
 

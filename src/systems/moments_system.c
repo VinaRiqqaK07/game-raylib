@@ -13,10 +13,9 @@ bool inputCorrect = false;
 Rectangle inputBox = {SCREEN_WIDTH/2 - 150, SCREEN_HEIGHT/2, 300, 40};
 Rectangle submitBtn = {SCREEN_WIDTH/2 - 60, SCREEN_HEIGHT/2 + 60, 120, 40};
 
-void InitMoments(Rectangle input, Rectangle submit)
+void InitMoments()
 {
-    inputBox = input;
-    submitBtn = submit;
+    inputCorrect = false;
 }
 
 void UpdateMoments()

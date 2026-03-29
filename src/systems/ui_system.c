@@ -14,9 +14,17 @@
 #include <math.h>
 #include "ui_system.h"
 
-bool UIButton(Rectangle rect, const char *text, Color color)
+bool UIButton(Rectangle rect, Texture2D texture)
 {
-    DrawRectangleRec(rect, color);
+    // Draw texture (fit ke rect)
+    DrawTexturePro(
+        texture,
+        (Rectangle){0, 0, texture.width, texture.height},
+        rect,
+        (Vector2){0, 0},
+        0.0f,
+        WHITE
+    );
     
     if(CheckCollisionPointRec(GetMousePosition(), rect))
     {
@@ -28,7 +36,7 @@ bool UIButton(Rectangle rect, const char *text, Color color)
         
     }
     
-    DrawText(text, rect.x + 10, rect.y + 10, 20, WHITE);
+    //DrawText(text, rect.x + 10, rect.y + 10, 20, WHITE);
     
     return false;
     

@@ -1,3 +1,17 @@
+/**
+ * File: puzzle1_past_scene.c
+ * Description:
+ * Handles the logic and rendering for Puzzle 1 PAST role Scene.
+ * This room contains pictures assets, zoom system, and sequence puzzle systems
+ *
+ * Responsibilities:
+ * - Initialize textures.
+ * - Handle zoom system, sequence symbol puzzle, and caption system.
+ *
+ *
+ *
+ */
+
 #include "raylib.h"
 #include <stdio.h>
 #include "puzzle1_past_scene.h"
@@ -10,7 +24,7 @@
 #include "../../systems/sequence_system.h"
 #include "../../systems/caption_system.h"
 
-Texture2D bgPastP1, candleZoom, roundpicZoom, teasetZoom, telephoneZoom, shelfZoom, albumTexture, photo1Album;
+Texture2D bgPastP1, candleZoom, roundpicZoom, telephoneZoom, albumTexture, photo1Album;
 Rectangle sourceRoomPast;
 Rectangle destRoomPast;
 Rectangle sourceAlbum;
@@ -18,9 +32,7 @@ Rectangle destAlbum;
 
 Rectangle zoomCandle = {450, 250, 100, 100};
 Rectangle roundPic = {30, 178, 120, 260};
-Rectangle teaSet = {365, 470, 130, 100};
 Rectangle telephone = {770, 450, 90, 90};
-Rectangle shelf = {880, 330, 150, 200};
 
 bool albumPastOpen = false;
 ZoomSystem zoom;
@@ -37,14 +49,13 @@ void InitPuzzle1PastScene()
 {
     InitCaptionSystem(&captionPast);
     
-    bgPastP1 = LoadTexture("../assets/room0/mainhall_room0_past.jpg");
+    bgPastP1 = LoadTexture("../assets/puzzle1/mainhall_puzzle1_past.jpg");
     InitZoomSystem(&zoom, bgPastP1);
     
-    candleZoom = LoadTexture("../assets/candle_room0_past.jpg");
-    roundpicZoom = LoadTexture("../assets/round-pic_room0_past.jpg");
-    teasetZoom = LoadTexture("../assets/tea-set_room0_past.jpg");
-    telephoneZoom = LoadTexture("../assets/telephone_room0_past.jpg");
-    shelfZoom = LoadTexture("../assets/shelf_room0_past.jpg");
+    candleZoom = LoadTexture("../assets/puzzle1/candle_puzzle1_past.jpg");
+    roundpicZoom = LoadTexture("../assets/puzzle1/roundpic_puzzle1_past.png");
+    telephoneZoom = LoadTexture("../assets/puzzle1/telephone_puzzle1_past.png");
+    
     
     albumTexture = LoadTexture("../assets/room0/artboard-album_room0_past.png");
     photo1Album = LoadTexture("../assets/room0/photo1-album_room0_past.png");
@@ -80,18 +91,10 @@ void UpdatePuzzle1PastScene()
         else if(CheckCollisionPointRec(mouse, roundPic)&& zoom.state == ZOOM_IDLE && !albumPastOpen)
         {
             TriggerZoom(&zoom, roundpicZoom);
-        } 
-        else if(CheckCollisionPointRec(mouse, teaSet)&& zoom.state == ZOOM_IDLE && !albumPastOpen)
-        {
-            TriggerZoom(&zoom, teasetZoom);
         }
         else if(CheckCollisionPointRec(mouse, telephone)&& zoom.state == ZOOM_IDLE && !albumPastOpen)
         {
             TriggerZoom(&zoom, telephoneZoom);
-        }
-        else if(CheckCollisionPointRec(mouse, shelf)&& zoom.state == ZOOM_IDLE && !albumPastOpen)
-        {
-            TriggerZoom(&zoom, shelfZoom);
         }
         
         if(!albumPastOpen && CheckCollisionPointRec(GetMousePosition(), destAlbum) && zoom.state == ZOOM_IDLE)
@@ -197,7 +200,7 @@ void DrawPuzzle1PastScene()
         
         if(IsPuzzle1PastComplete && albumPastOpen)
         {
-            DrawTexturePro(photo1Album, (Rectangle){0, 0, photo1Album.width, photo1Album.height}, (Rectangle){682, 200, 200, (200 * photo1Album.height/photo1Album.width)}, (Vector2){0, 0}, 2.0f, WHITE);
+            DrawTexturePro(photo1Album, (Rectangle){0, 0, photo1Album.width, photo1Album.height}, (Rectangle){682, 130, 300, (300 * photo1Album.height/photo1Album.width)}, (Vector2){0, 0}, 2.0f, WHITE);
         }
     }
     
@@ -212,9 +215,7 @@ void UnloadPuzzle1PastScene()
     UnloadTexture(bgPastP1);
     UnloadTexture(candleZoom);
     UnloadTexture(roundpicZoom);
-    UnloadTexture(teasetZoom);
     UnloadTexture(telephoneZoom);
-    UnloadTexture(shelfZoom);
     UnloadTexture(albumTexture);
     UnloadTexture(photo1Album);
 }

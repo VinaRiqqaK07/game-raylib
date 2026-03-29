@@ -1,3 +1,17 @@
+/**
+ * Connect Minigame
+ *
+ * Minigame that displays grid and nodes. Each nodes
+ * need to be connected and fullfill every grid cells
+ *
+ * Usage:
+ * 1. Call InitConnectGrid() once
+ * 2. Call UpdateConnectGrid() every frame when particular scene is rendered
+ * 3. Call DrawConnectGrid() in render loop
+ *
+ * 
+ */
+
 #include "raylib.h"
 #include <stdlib.h>
 

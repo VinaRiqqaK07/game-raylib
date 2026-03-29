@@ -25,11 +25,9 @@ bool startClicked = false;
 bool continueClicked = false;
 bool loadExist = false;
 
-int titleWidth;
-int sloganWidth;
+Texture2D menuBackground, startButton, continueButton;
+
 float spacing;
-float titleHeight;
-float sloganHeight;
 float buttonHeight;
 float totalHeight;
 
@@ -39,21 +37,17 @@ float y;
 
 void InitMenuScene()
 {
-        spacing = 30;
-        titleHeight = 50;
-        sloganHeight = 30;
-        buttonHeight = 40;
+    menuBackground = LoadTexture("../assets/start/main-background.jpeg");
+    startButton = LoadTexture("../assets/start/start.jpeg");
+    continueButton = LoadTexture("../assets/start/continue.jpeg");
+    
+    spacing = 30;
+    buttonHeight = 70;
         
-        totalHeight = titleHeight + sloganHeight + buttonHeight*2 + spacing * 2;
+    totalHeight = buttonHeight*2 + spacing * 2;
         
-        startY = (SCREEN_HEIGHT/2) - (totalHeight/2);
-        centerX = SCREEN_WIDTH/2;
-        
-        title = "Developed in Time";
-        titleWidth = MeasureText(title, 50);
-        
-        slogan = "Every memory you make becomes the future you live";
-        sloganWidth = MeasureText(slogan, 30);
+    startY = (SCREEN_HEIGHT/2) - (totalHeight/2);
+    centerX = SCREEN_WIDTH/2;
 }
 
 void UpdateMenuScene()
@@ -62,7 +56,7 @@ void UpdateMenuScene()
     if(startClicked)
     {
         DeleteSave();
-        ChangeScene(SELECT_ROLE);     
+        ChangeScene(SELECT_ROLE);        
     }
     
     if(continueClicked)
@@ -78,6 +72,14 @@ void UpdateMenuScene()
             {
                 ChangeScene(SCENE_PUZZLE2);
             }
+            else if (game.currentLevel == 3)
+            {
+                ChangeScene(SCENE_PUZZLE3);
+            }
+            else if (game.currentLevel == 4)
+            {
+                ChangeScene(SCENE_PUZZLE4);
+            }
         }            
     }
     
@@ -87,26 +89,23 @@ void DrawMenuScene()
 {
     ClearBackground(BLACK);
     
-    // LOGO
-    DrawText(title, centerX - titleWidth/2, startY, 50, WHITE);
-    y = startY + titleHeight + spacing;
+    DrawTexturePro(menuBackground, (Rectangle){0, 0, menuBackground.width, menuBackground.height}, (Rectangle){0, 0, SCREEN_WIDTH, SCREEN_HEIGHT}, (Vector2){0, 0}, 0.0f, WHITE);
     
-    // SLOGAN
-    DrawText(slogan, centerX - sloganWidth/2, y, 30, WHITE);
-    y += sloganHeight + spacing;
-    
+    y = startY;
     // BUTTON
-    Rectangle button = {centerX - 140/2, y, 140, 40};               
-    startClicked = UIButton(button, "Start Game", DARKGRAY);
+    Rectangle button = {centerX - 300/2, y, 300, 70};               
+    startClicked = UIButton(button, startButton);
     y += buttonHeight + spacing;
     
-    Rectangle buttonContinue = {centerX - 140/2, y, 140, 40};               
-    continueClicked = UIButton(buttonContinue, "Continue", DARKGRAY);
+    Rectangle buttonContinue = {centerX - 300/2, y, 300, 70};               
+    continueClicked = UIButton(buttonContinue, continueButton);
     
 }
 
 void UnloadMenuScene()
 {
-    
+    UnloadTexture(menuBackground);
+    UnloadTexture(startButton);
+    UnloadTexture(continueButton);
 }
 

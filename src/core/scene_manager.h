@@ -10,12 +10,13 @@ typedef enum GameScene {
     SELECT_ROLE,
     SCENE_INTRO,
     SCENE_PUZZLE1,
-    SCENE_PUZZLE2
-    /*SCENE_LEVEL3,
-    SCENE_LEVEL4,
-    SCENE_FINAL*/
+    SCENE_PUZZLE2,
+    SCENE_PUZZLE3,
+    SCENE_PUZZLE4,
+    SCENE_ENDING
 } GameScene;
 
+GameScene GetCurrentScene();
 void InitScene(GameScene scene);
 void UpdateScene();
 void DrawScene();

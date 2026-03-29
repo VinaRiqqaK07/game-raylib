@@ -1,3 +1,16 @@
+/**
+ * Wiring Minigame
+ *
+ * Minigame that displays two faced nodes as a wires position.
+ * Every wires with the same color need to be connected.
+ *
+ * Usage:
+ * 1. Call InitWiring() once
+ * 2. Call UpdateWiring() every frame when particular scene is rendered
+ * 3. Call DrawWiring() in render loop
+ *
+ * 
+ */
 #include "raylib.h"
 
 typedef struct {
@@ -19,6 +32,7 @@ typedef struct {
 
 void InitWiring(WiringSystem *ws)
 {
+    /*
     int slots[4] = {0, 1, 2, 3};
 
     // shuffle
@@ -29,14 +43,28 @@ void InitWiring(WiringSystem *ws)
         int temp = slots[i];
         slots[i] = slots[j];
         slots[j] = temp;
-    }
+    }*/
     
-    Color colors[4] = {RED, BLUE, GREEN, YELLOW};
+    Color colors[4] = {YELLOW, BLUE, RED, PINK};
+
+    // mapping start → end
+    // index: start index
+    // value: posisi end index
+    int endMapping[4] = {
+        2, // YELLOW → posisi 2 (YELLOW di end)
+        1, // BLUE   → posisi 1
+        0, // RED    → posisi 0
+        3  // PINK   → posisi 3
+    };
 
     for(int i = 0; i < 4; i++)
     {
-        ws->wires[i].startPos = (Vector2){400, 200 + i * 80};
-        ws->wires[i].endPos = (Vector2){800, 200 + slots[i] * 80};
+        ws->wires[i].startPos = (Vector2){400, 200 + i * 78};
+
+        ws->wires[i].endPos = (Vector2){
+            710,
+            200 + endMapping[i] * 78
+        };
 
         ws->wires[i].color = colors[i];
         ws->wires[i].connected = false;
@@ -99,7 +127,7 @@ void UpdateWiring(WiringSystem *ws)
 
 void DrawWiring(WiringSystem *ws)
 {
-    DrawRectangleRec((Rectangle){380, 180, 440, 280}, DARKGRAY);
+    //DrawRectangleRec((Rectangle){380, 180, 440, 280}, DARKGRAY);
     Vector2 mouse = GetMousePosition();
 
     for(int i = 0; i < 4; i++)

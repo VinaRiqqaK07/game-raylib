@@ -6,6 +6,7 @@ void InitRoleScene();
 void UpdateRoleScene();
 void DrawRoleScene();
 void ShowSelection();
+/*
 void ShowPast();
-void ShowFuture();
+void ShowFuture();*/
 void UnloadRoleScene();

@@ -1,3 +1,17 @@
+/**
+ * File: puzzle1_future_scene.c
+ * Description:
+ * Handles the logic and rendering for Puzzle 1 Scene.
+ * This room contains pictures assets, zoom system, and keypad systems
+ *
+ * Responsibilities:
+ * - Initialize textures.
+ * - Handle zoom system, sequence symbol puzzle, and safe keypad system.
+ *
+ *
+ *
+ */
+
 #include "raylib.h"
 #include "puzzle1_future_scene.h"
 #include "../../utils/constants.h"

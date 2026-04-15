@@ -46,6 +46,13 @@ bool adinput = false;
 
 void InitPuzzle1FutureScene()
 {
+    IsPuzzle1FutureComplete = false;
+    adinput = false;
+    tiltedPicShoved = false;
+    roundSafeShowed = false;
+    keypadShowed = false;
+    telephoneKeypadShowed = false;
+
     introRoomFuture = LoadTexture("../assets/room0/mainhall-0_room0_future.jpg");
     tiltedPic = LoadTexture("../assets/room0/tilted-pic_room0_future.png");
     roundSafe = LoadTexture("../assets/room0/roundsafe-closed_room0_future.jpg");
@@ -170,8 +177,7 @@ void UpdatePuzzle1FutureScene()
 void DrawPuzzle1FutureScene()
 {
     ClearBackground(BLACK);
-    //DrawTexturePro(introRoomFuture,sourceRoomFuture,destRoomFuture,(Vector2){0,0},0.0f,WHITE);
-    //DrawText("FUTURE ROOM 0", 200, 150, 20, WHITE);
+    
     DrawZoomSystem(&zoomFuture);
     
     if (!tiltedPicShoved && roundSafeShowed && zoomFuture.state == ZOOMED)
@@ -182,11 +188,6 @@ void DrawPuzzle1FutureScene()
     {
         DrawKeypad(&keypadRoundSafe);
         //DrawRectangleRec(roundKeypadArea, WHITE);
-    }
-    
-    if (IsPuzzle1FutureComplete)
-    {
-        DrawText("PUZZLLE 1 COMPLETE", 200, 150, 20, WHITE);
     }
     
     //DrawText(TextFormat("InputLength: %d", telephoneSequenceP1.inputLength), 100, 100, 20, RED);

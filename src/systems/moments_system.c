@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "../utils/constants.h"
 #include "../core/scene_manager.h"
+#include "../core/game.h"
 #include <string.h>
 
 char inputText[64] = "\0";
@@ -9,13 +10,19 @@ int letterCount = 0;
 bool isTyping = false;
 bool submitted = false;
 bool inputCorrect = false;
+bool isInputMoments = true;
 
 Rectangle inputBox = {SCREEN_WIDTH/2 - 150, SCREEN_HEIGHT/2, 300, 40};
 Rectangle submitBtn = {SCREEN_WIDTH/2 - 60, SCREEN_HEIGHT/2 + 60, 120, 40};
 
-void InitMoments()
+void InitMoments(bool isMoments)
 {
     inputCorrect = false;
+    isInputMoments = isMoments;
+    letterCount = 0;
+    inputText[0] = '\0';
+    isTyping = false;
+    submitted = false;
 }
 
 void UpdateMoments()
@@ -70,25 +77,69 @@ void UpdateMoments()
     // tekan enter
     if ((IsKeyPressed(KEY_ENTER) || submitted == true) && letterCount > 0)
     {
-        if (strcmp(inputText, "moments") == 0)
+        if (isInputMoments && game.role == ROLE_PAST)
         {
-            submitted = true;
-            inputCorrect = true;
-        }
-        else
-        {
-            inputCorrect = false;
+            if (strcmp(inputText, "moments") == 0)
+            {
+                submitted = true;
+                inputCorrect = true;
+            }
+            else
+            {
+                inputCorrect = false;
 
-            // reset biar player coba lagi
-            letterCount = 0;
-            inputText[0] = '\0';
+                // reset biar player coba lagi
+                letterCount = 0;
+                inputText[0] = '\0';
+            }
         }
+        else if (!isInputMoments && game.role == ROLE_PAST)
+        {
+            if (strcmp(inputText, "failed") == 0)
+            {
+                submitted = true;
+                inputCorrect = true;
+            }
+            else
+            {
+                inputCorrect = false;
+
+                // reset biar player coba lagi
+                letterCount = 0;
+                inputText[0] = '\0';
+            }
+        }
+        else if (game.role == ROLE_FUTURE)
+        {
+            if (strcmp(inputText, "moments") == 0 || strcmp(inputText, "failed") == 0)
+            {
+                submitted = true;
+                inputCorrect = true;
+            }
+            else
+            {
+                inputCorrect = false;
+
+                // reset biar player coba lagi
+                letterCount = 0;
+                inputText[0] = '\0';
+            }
+        }
+        
     }
 
     // pindah scene kalau sudah submit
     if (submitted && inputCorrect)
     {
-        ChangeScene(SCENE_ENDING);
+        if (strcmp(inputText, "moments") == 0)
+        {
+            ChangeScene(SCENE_ENDING);
+        }
+        else
+        {
+            ChangeScene(SCENE_PUZZLE1);
+        }
+        
     }
 }
 
@@ -98,7 +149,19 @@ void DrawMoments()
     //DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Fade(BLACK, 0.6f));
 
     // ===== TITLE =====
-    DrawText("Type 'moments' to end this.", SCREEN_WIDTH/2 - 80, SCREEN_HEIGHT/2 - 80, 30, WHITE);
+    if (game.role == ROLE_PAST)
+    {
+        if (isInputMoments)
+        {
+            DrawText("Type 'moments' for both players.", SCREEN_WIDTH/2 - 200, SCREEN_HEIGHT/2 - 80, 30, WHITE);
+        }
+        else 
+        {
+             DrawText("Type 'failed' for both players.", SCREEN_WIDTH/2 - 200, SCREEN_HEIGHT/2 - 80, 30, WHITE);
+        }
+    }
+    
+    
 
     // ===== INPUT BOX =====
     DrawRectangleRec(inputBox, DARKGRAY);

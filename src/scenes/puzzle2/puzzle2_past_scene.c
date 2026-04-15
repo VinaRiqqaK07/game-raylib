@@ -51,6 +51,12 @@ bool IsPuzzle2PastComplete = false;
 
 void InitPuzzle2PastScene()
 {
+    wireMinigameOpen = false;
+    bwButtonDetailOpen = false;
+    albumPastPuzzle2Open = false;
+    loadnewBWDetail = false;
+    IsPuzzle2PastComplete = false;
+
     bgPuzzle2Past = LoadTexture("../assets/puzzle2/mainhall_puzzle2_past.jpg");
     wiringDetail = LoadTexture("../assets/puzzle2/wiring-detail_puzzle2_past.jpg");
     wiringGame = LoadTexture("../assets/puzzle2/wiring-game_puzzle2_past.jpg");

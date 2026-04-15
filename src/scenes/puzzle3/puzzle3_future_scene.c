@@ -39,6 +39,7 @@ void InitPuzzle3FutureScene()
     keypadP3.panel = keyboardP3Area;
     
     InitKeypad2(&keypadP3);
+    openKeypadP3 = false;
 }
 
 void UpdatePuzzle3FutureScene()

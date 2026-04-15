@@ -36,6 +36,9 @@ bool openKeypadP4 = false;
 
 void InitPuzzle4FutureScene()
 {
+    itemSheetBoxActive = false;
+    openKeypadP4 = false;
+    
     // ========== LOAD TEXTURE =========================
     bgPuzzle4Future = LoadTexture("../assets/puzzle3/future/background_puzzle3_future.png");
     clue1P4Top = LoadTexture("../assets/puzzle4/future/clue1_puzzle4_future.png");
@@ -55,7 +58,7 @@ void InitPuzzle4FutureScene()
     
     InitKeypad2(&keypadP4);
     
-    InitMoments();
+    InitMoments(true);
 }
 
 void UpdatePuzzle4FutureScene()
@@ -133,6 +136,7 @@ void DrawPuzzle4FutureScene()
     // ===== DRAW INPUT FIELD =============
     if (keypadP4.passwordCorrect && !openKeypadP4)
     {
+        DrawRectangle(0, 0, SCREEN_WIDTH,SCREEN_HEIGHT, Fade(BLACK, 0.7f));
         DrawMoments();
     }
 }

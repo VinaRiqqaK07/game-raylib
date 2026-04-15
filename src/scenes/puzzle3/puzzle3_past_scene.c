@@ -65,6 +65,11 @@ SymbolPuzzle symbolSequenceP3Past;
 
 void InitPuzzle3PastScene()
 {
+    slotFilled[3] = (bool){false, false, false};
+    puzzleNumberP3Complete = false;
+    albumPastPuzzle3Open = false;
+    IsPuzzle3PastComplete = false;
+
     bgPuzzle3Past = LoadTexture("../assets/puzzle3/past/background_puzzle3_past.png");
     
     albumTextureP3 = LoadTexture("../assets/room0/artboard-album_room0_past.png");

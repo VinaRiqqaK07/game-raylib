@@ -33,18 +33,31 @@ float scaleSprite = 0.2f;
 
 int currentEnding = 0;
 float endingTimer = 0.0f;
+Font fontEnding;
 
 void InitEndingScene()
 {
+    fontEnding = LoadFont("../assets/font/Margon-360-Bold.otf");
+    
     endingImages[0] = LoadTexture("../assets/ending/pic1_ending.png");
     endingImages[1] = LoadTexture("../assets/ending/pic2_ending.png");
     endingImages[2] = LoadTexture("../assets/ending/pic3_ending.png");
     endingImages[3] = LoadTexture("../assets/ending/pic4_ending.png");
-
-    endingCaptions[1] = "This photo... someone's handing him car keys.\nWhat's about to happen...?";
-    endingCaptions[0] = "The clock... It worked. And this photo..\nWhy is only my son circled? \nIs something going to happen to him?";
-    endingCaptions[2] = "Another photo... a car this time. Why does this feel... wrong?";
-    endingCaptions[3] = "This is all of us... They're smiling...\nI can't change what will happen,\nbut atleast I gave them this moment.";
+    
+    if (game.role == ROLE_PAST)
+    {
+        endingCaptions[1] = "This photo... someone's handing him car keys.\nWhat's about to happen...?";
+        endingCaptions[0] = "The clock... It worked. And this photo..\nWhy is only my son circled? \nIs something going to happen to him?";
+        endingCaptions[2] = "Another photo... a car this time. Why does this feel... wrong?";
+        endingCaptions[3] = "This is all of us... They're smiling...\nI can't change what will happen,\nbut atleast I gave them this moment.";
+    }
+    else if (game.role == ROLE_FUTURE)
+    {
+        endingCaptions[1] = "I lost my son in a car accident. I tried to change it-\ngoing back, warning my past self, doing everything";
+        endingCaptions[0] = "I could stop him from getting into that car. But no matter what i did, \nthe outcome never changed.";
+        endingCaptions[2] = "Fate stayed the same.\nSo maybe the only thing left isn't to fight it anymore, \nbut to accept it.";
+        endingCaptions[3] = "To go back not to prevent the inevitable, but to cherish\nwhat little time we had left-to hold onto those final moments, \nand make sure they were seen, felt, and remembered.";
+    }
 
     float startX = 100;
     float y = 100;
@@ -139,13 +152,8 @@ void DrawEndingScene()
             Fade(BLACK, 0.6f)
         );
 
-        DrawText(
-            endingCaptions[currentEnding],
-            SCREEN_WIDTH/2 - textWidth/2,
-            SCREEN_HEIGHT - 120,
-            fontSize,
-            WHITE
-        );
+        //DrawText(endingCaptions[currentEnding],SCREEN_WIDTH/2 - textWidth/2,SCREEN_HEIGHT - 120,fontSize,WHITE);
+        DrawTextEx(fontEnding, endingCaptions[currentEnding], (Vector2){SCREEN_WIDTH/2 - textWidth/2,SCREEN_HEIGHT - 120}, fontSize, 2, WHITE);
     }
 }
 

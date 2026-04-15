@@ -3,6 +3,7 @@
 #include "utils/constants.h"
 #include "core/game.h"
 #include "core/scene_manager.h"
+#include "core/audio_manager.h"
 
 // Program main entry point
 int main(void)
@@ -12,21 +13,27 @@ int main(void)
     const int screenHeight = SCREEN_HEIGHT;
     
     GameScene lastScene = -1;
+    //Font monologFont;
     
-    Music *currentMusic = NULL;
+    //Music *currentMusic = NULL;
     
 
     InitWindow(screenWidth, screenHeight, "Between Two Moments");
     
-    InitAudioDevice();
+    //InitAudioDevice();
     
+    InitAudioManager();
+    
+    /*
     Music ending = LoadMusicStream("../assets/music/ending.mp3");
     Music puzzle = LoadMusicStream("../assets/music/Game.mp3");
     Music intro = LoadMusicStream("../assets/music/Intro.mp3");
-    
+    */
     //SetMusicLooping(intro, true);
     //SetMusicLooping(puzzle, true);
     //SetMusicLooping(ending, true);
+    
+    
 
     SetTargetFPS(60);      // Set our game to run at 60 frames-per-second
     
@@ -43,15 +50,17 @@ int main(void)
         
         // ======= MUSIC MANAGER ============
         GameScene scene = GetCurrentScene();
+        PlayMusicByScene(scene);
+        UpdateAudioManager();
         
-        
+        /*
         if (scene != lastScene)
         {
-            /*
+            
             if (currentMusic != NULL)
             {
                 StopMusicStream(*currentMusic);
-            }*/
+            }
 
             // tentukan music baru
             switch(scene)
@@ -103,6 +112,7 @@ int main(void)
         
         if (currentMusic != NULL)
             UpdateMusicStream(*currentMusic);
+        */
     
         // Draw
         BeginDrawing();
@@ -115,8 +125,8 @@ int main(void)
     }
 
     // De-Initialization
-    UnloadMusicStream(*currentMusic);
-    CloseAudioDevice();
+    UnloadAudioManager();
+    //UnloadFont(monologFont);
     
     CloseWindow();        // Close window and OpenGL context
 

@@ -15,6 +15,7 @@
  
 #include "raylib.h"
 #include <stdio.h>
+#include <math.h>
 #include "../../utils/constants.h"
 #include "../../core/game.h"
 #include "../../core/scene_manager.h"
@@ -26,8 +27,25 @@
 Texture bgPuzzle4, albumTextureP4, photo1AlbumP4, photo2AlbumP4, photo3AlbumP4, photo4AlbumP4;
 Rectangle sourceAlbumP4;
 Rectangle destAlbumP4;
-
 bool albumPast4Open = false;
+Font customFont;
+
+typedef enum {
+    PUZZLE_PLAYING,
+    PUZZLE_FAILED
+} PuzzleStatus;
+
+typedef struct {
+    float timer;
+    float failTimer;   // untuk delay 2 detik
+    float flashAlpha;
+    PuzzleStatus status;
+    int session;
+} PuzzleState;
+
+bool InitMomentFirst = false;
+
+PuzzleState puzzle4Timer;
 
 // ============ INITIALIZE LIGHT SYSTEM & WALLS ==========
 LightSystem light;
@@ -63,9 +81,17 @@ Rectangle symbol4P4Past = {460, 430, 33, 35};
 bool IsPhoto4Shown = false;
 
 SymbolPuzzle symbolSequenceP4Past;
+bool lastFailed = false;
 
 void InitPuzzle4PastScene()
 {
+    albumPast4Open = false;
+    IsPhoto4Shown = false;
+    InitMomentFirst = false;
+    point1Visited = false;
+    point2Visited = false;    
+    triggerAlbumOnce = false;
+    
     // ============ LOAD TEXTURE ==============
     bgPuzzle4 = LoadTexture("../assets/puzzle4/past/background_puzzle4_past.png");
     
@@ -77,6 +103,8 @@ void InitPuzzle4PastScene()
     
     sourceAlbumP4 = (Rectangle){0, 0, albumTextureP4.width, albumTextureP4.height};
     destAlbumP4 = (Rectangle){SCREEN_WIDTH - 160, SCREEN_HEIGHT - 160, 120, 120};
+    
+    customFont = LoadFont("../assets/font/Margon-360-Bold.otf");
     
     // =============== LIGHT SYSTEM =============
     InitLighting(&light, 100, 300, 130);
@@ -107,14 +135,104 @@ void InitPuzzle4PastScene()
     symbolSequenceP4Past.sequence[5] = 2;
     
     symbolSequenceP4Past.sequenceLength = 6;
+    symbolSequenceP4Past.solved = false;
     
     InitSequencePuzzle(&symbolSequenceP4Past, 6);
     
-    InitMoments();
+    //InitMoments();
+    puzzle4Timer.timer = 17.0f; // 17 detik
+    puzzle4Timer.failTimer = 0.0f;
+    puzzle4Timer.flashAlpha = 0.0f;
+    puzzle4Timer.session = 3;
+    puzzle4Timer.status = PUZZLE_PLAYING;
 }
 
 void UpdatePuzzle4PastScene()
 {
+    if (!point1Visited || !point2Visited || !lastFailed)
+    {
+        if (puzzle4Timer.status == PUZZLE_PLAYING)
+        {
+            puzzle4Timer.timer -= GetFrameTime();
+
+            if (puzzle4Timer.timer <= 0.0f && puzzle4Timer.session > 0)
+            {
+                puzzle4Timer.status = PUZZLE_FAILED;
+                
+                point1Visited = false;
+                point2Visited = false;    
+                triggerAlbumOnce = false;
+                IsPhoto4Shown = false;
+                albumPast4Open = false;
+                symbolSequenceP4Past.solved = false;
+                puzzle4Timer.session -= 1;
+                //ChangeScene(SCENE_PUZZLE4); // reset
+                //return;
+            }
+            else if (puzzle4Timer.timer <= 0.0f && puzzle4Timer.session <= 0)
+            {
+                puzzle4Timer.status = PUZZLE_FAILED;
+                puzzle4Timer.session -= 1;
+                
+                point1Visited = false;
+                point2Visited = false;    
+                triggerAlbumOnce = false;
+                IsPhoto4Shown = false;
+                albumPast4Open = false;
+                symbolSequenceP4Past.solved = false;
+                
+                if (InitMomentFirst == false)
+                {
+                    InitMomentFirst = true;
+                    InitMoments(false);
+                    
+                    point1Visited = true;
+                    point2Visited = true;
+                    
+                    //triggerAlbumOnce = false;
+                    IsPhoto4Shown = true;
+                    //albumPast4Open = false;
+                    //symbolSequenceP4Past.solved = false;
+                    
+                }
+            }
+        }
+        else if (puzzle4Timer.status == PUZZLE_FAILED)
+        {
+            puzzle4Timer.failTimer += GetFrameTime();
+            puzzle4Timer.flashAlpha = puzzle4Timer.failTimer / 3.0f;
+
+            if(puzzle4Timer.failTimer >= 1.8f) puzzle4Timer.flashAlpha = 1.0f;
+            if (puzzle4Timer.failTimer >= 2.0f)
+            {
+                puzzle4Timer.flashAlpha = 0.0f;
+                light.position = (Vector2){100, 300};
+                puzzle4Timer.timer = 17.0f;
+                puzzle4Timer.failTimer = 0.0f;
+                if (puzzle4Timer.session <= -1)
+                {
+                    puzzle4Timer.status = PUZZLE_FAILED;
+                }
+                else
+                {
+                    puzzle4Timer.status = PUZZLE_PLAYING;
+                }
+                
+                if (puzzle4Timer.failTimer <= 0.0f && puzzle4Timer.session <= -1)
+                {
+                    lastFailed = true;
+                    //puzzle4Timer.status = PUZZLE_FAILED;
+                }
+                return;
+            }
+            
+            
+            
+        }
+    }
+    
+    
+    
     // ================ HANDLE LIGHTING =============
     if(!albumPast4Open && !CheckCollisionPointRec(GetMousePosition(), destAlbumP4)) //&& (!point1Visited || !point2Visited))
     {
@@ -130,19 +248,25 @@ void UpdatePuzzle4PastScene()
     if (CheckCollisionCircleRec(light.position, 8.0f, checkPoint2))
     {
         point2Visited = true;
-        
-        
     }
     
-    if (point1Visited && point2Visited && !triggerAlbumOnce)
+    if (point1Visited && point2Visited && !triggerAlbumOnce && puzzle4Timer.failTimer <= 0.0f)
     {
         triggerAlbumOnce = true;
         destAlbumP4 = (Rectangle){SCREEN_WIDTH/2 - 250, SCREEN_HEIGHT/2 - 250, 500, 500};
         albumPast4Open = true;
+        
+        if (InitMomentFirst == false)
+        {
+           InitMomentFirst = true;
+           InitMoments(true);
+           lastFailed = true;
+           puzzle4Timer.failTimer = 0.0f;
+        }
     }
     
     // ============== HANDLE INPUT FIELD ===========
-    if (point1Visited && point2Visited && !albumPast4Open && triggerAlbumOnce)
+    if (point1Visited && point2Visited && !albumPast4Open && triggerAlbumOnce && puzzle4Timer.failTimer <= 0.0f)
     {
         UpdateMoments();
     }
@@ -213,7 +337,7 @@ void DrawPuzzle4PastScene()
     DrawLighting(&light);
     
     // Draw album
-    if(albumPast4Open && point1Visited && point2Visited)
+    if(albumPast4Open && point1Visited && point2Visited && puzzle4Timer.failTimer <= 0.0f)
     {
         DrawRectangle(0, 0, SCREEN_WIDTH,SCREEN_HEIGHT, Fade(BLACK, 0.5f));
             
@@ -231,14 +355,38 @@ void DrawPuzzle4PastScene()
         }
         
     }
-    else if (point1Visited && point2Visited)
+    else if (point1Visited && point2Visited && puzzle4Timer.failTimer <= 0.0f)
     {
         DrawRectangle(destAlbumP4.x - 5, destAlbumP4.y - 5, destAlbumP4.width + 10, destAlbumP4.height + 10, Fade(BLACK, 0.3f));
         DrawTexturePro(albumTextureP4, sourceAlbumP4, destAlbumP4, (Vector2){0, 0}, 0.0f, WHITE);
     }
     
+    if (!point1Visited || !point2Visited)
+    {
+        int minutes = (int)puzzle4Timer.timer / 60;
+        int seconds = (int)puzzle4Timer.timer % 60;
+
+        DrawText(TextFormat("%02d:%02d", minutes, seconds), 20, 20, 30, WHITE);
+        DrawText(TextFormat("%02d session", puzzle4Timer.session), 20, 60, 30, WHITE);
+    }
+    
+    if (puzzle4Timer.status == PUZZLE_FAILED && !lastFailed)
+    {
+        // result: 0 → 1 → 0 → 1 (fast blink)
+
+        DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Fade(RED, puzzle4Timer.flashAlpha));
+        
+        if (InitMomentFirst && puzzle4Timer.failTimer > 0.0f)
+        {
+            //DrawText("You Failed", SCREEN_WIDTH/2 - MeasureText("You Failed", 50), SCREEN_HEIGHT/2, 50, BLACK);
+            
+            DrawTextEx(customFont, "You Failed", (Vector2){SCREEN_WIDTH/2 - 100, SCREEN_HEIGHT/2}, 50, 5, BLACK);
+        }
+        
+    }
+    
     // Draw Input Field
-    if (point1Visited && point2Visited && !albumPast4Open && triggerAlbumOnce && IsPhoto4Shown)
+    if (point1Visited && point2Visited && !albumPast4Open && triggerAlbumOnce && IsPhoto4Shown && puzzle4Timer.failTimer <= 0.0f)
     {
         DrawMoments();
     }

@@ -41,6 +41,11 @@ bool IsPuzzle2FutureComplete = false;
 
 void InitPuzzle2FutureScene()
 {
+    shelfDetailedP2Open = false;
+    telephoneP2Showed = false;
+    IsConnectP2Complete = false;
+    IsPuzzle2FutureComplete = false;
+
     bgPuzzle2Future = LoadTexture("../assets/puzzle2/mainhall_room0_future.jpg");
     shelfFutureP2 = LoadTexture("../assets/puzzle2/pigura_puzzle2_future.png");
     telephoneP2Detail = LoadTexture("../assets/room0/telephone_room0_future.jpg");

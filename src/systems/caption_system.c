@@ -32,8 +32,12 @@ typedef struct {
     float alpha;        // Text visibility
 } Caption;
 
+Font captionFont;
+
 void InitCaptionSystem(Caption *cap)
 {
+    captionFont = LoadFont("../assets/font/Margon-360-Bold.otf");
+    
     cap->text = "";
     cap->textWidth = MeasureText(cap->text, 30);
     cap->duration = 0.0f;
@@ -79,7 +83,8 @@ void DrawCaption(Caption *cap)
         DrawRectangle(0, SCREEN_HEIGHT - 150, SCREEN_WIDTH, 150, Fade(WHITE, 0.6f * cap->alpha));
         
         
-        DrawText(cap->text, SCREEN_WIDTH/2 - (cap->textWidth)/2, SCREEN_HEIGHT - 100, 30, Fade(BLACK, cap->alpha));
+        //DrawText(cap->text, SCREEN_WIDTH/2 - (cap->textWidth)/2, SCREEN_HEIGHT - 100, 30, Fade(BLACK, cap->alpha));
+        DrawTextEx(captionFont, cap->text, (Vector2){SCREEN_WIDTH/2 - (cap->textWidth)/2, SCREEN_HEIGHT - 100}, 30, 2, Fade(BLACK, cap->alpha));
        
         //DrawTextRec(GetFontDefault(), cap->text, (Rectangle){SCREEN_WIDTH/2 - 250, SCREEN_HEIGHT - 100, SCREEN_WIDTH/2, 120}, 30, 2, true, Fade(BLACK, cap->alpha));
         

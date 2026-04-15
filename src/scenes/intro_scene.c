@@ -39,9 +39,12 @@ Rectangle destIntro;
 int dialogueIndex = 0;
 
 Caption captionIntro;
+Font monologFont;
 
 void InitIntroScene()
 {
+    monologFont = LoadFont("../assets/font/Margon-360-Bold.otf");
+    
     introImages[0] = LoadTexture("../assets/intro/image-1.jpg");
     introImages[1] = LoadTexture("../assets/intro/image-2.jpg");
     introImages[2] = LoadTexture("../assets/intro/image-3.jpg");
@@ -55,18 +58,18 @@ void InitIntroScene()
     introImages[10] = LoadTexture("../assets/intro/image-11.jpg");
     introImages[11] = LoadTexture("../assets/intro/image-12.jpg");
     
-    captions[0] = "We had our perfect now.\nOur future was written in warm light";
-    captions[1] = "Just a normal Tuesday.\nA simple drive home";
-    captions[2] = "Just a few more minutes.\nJust a simple moment of time";
-    captions[3] = "Then, the other moment. The light";
-    captions[4] = "The sound. The awful sound.";
-    captions[5] = "Now only a broken echo remains.";
-    captions[6] = "But a 'broken echo' can still pulsate.\nI knew it, I had to try";
-    captions[7] = "With crude tools and falling memory, I spent years.\nWorking to amplify the faint sig...";
-    captions[8] = "..nal. The silence was absolute.\nMy own voice, lost in the void.";
-    captions[9] = "Then... a tremor. Not just sound, but a pulse.\nA memory.. but external";
-    captions[10] = "A path accross the abyss open. But i cannot traverse\nit alone. I need two hands.";
-    captions[11] = "To fix the broken moments, we must walk them\ntogether. Your memory.. is our path.";
+    captions[0] = "Once, there was a happy family, holding onto a quite moment\nthat felt like it would last forever.";
+    captions[1] = "They left for what should've been just\nanother normal drive.";
+    captions[2] = "Nothing felt wrong-just an ordinary day,\nlike any other.";
+    captions[3] = "Then, everything changed-\nheadlights, no time to react.";
+    captions[4] = "One survived. One didn't";
+    captions[5] = "Years later, only one remains,\nstuck in a memory they can't let go.";
+    captions[6] = "The father starts building time machine\nto go back.";
+    captions[7] = "He spends years trying to make it work.";
+    captions[8] = "He almost gives up.";
+    captions[9] = "Then it finally works-the past appears again.";
+    captions[10] = "The moment before everything went wrong\nis within reach";
+    captions[11] = "He steps forward, knowing he can't fix it alone-\nhe has to face it together across time.";
     
     sourceIntro = (Rectangle){0, 0, introImages[0].width, introImages[0].height};
     destIntro = (Rectangle){0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
@@ -144,13 +147,8 @@ void DrawIntroScene()
         Fade(BLACK, 0.6f * alpha)
     );
 
-    DrawText(
-        captions[currentIntro],
-        SCREEN_WIDTH/2 - textWidth/2,
-        SCREEN_HEIGHT - 130,
-        fontSize,
-        Fade(WHITE, alpha)
-    );
+    //DrawText(captions[currentIntro],SCREEN_WIDTH/2 - textWidth/2,SCREEN_HEIGHT - 130,fontSize,Fade(WHITE, alpha));
+    DrawTextEx(monologFont, captions[currentIntro], (Vector2){SCREEN_WIDTH/2 - textWidth/2,SCREEN_HEIGHT - 130}, fontSize, 2, Fade(WHITE, alpha));
 }
 
 void UnloadIntroScene()

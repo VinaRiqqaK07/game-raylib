@@ -47,6 +47,10 @@ int captionPastIndex = 0;
 
 void InitPuzzle1PastScene()
 {
+    albumPastOpen = false;
+    IsPuzzle1PastComplete = false;
+    captionPuzzle1PastFinish = false;
+    
     InitCaptionSystem(&captionPast);
     
     bgPastP1 = LoadTexture("../assets/puzzle1/mainhall_puzzle1_past.jpg");

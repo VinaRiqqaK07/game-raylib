@@ -15,6 +15,7 @@
  */
 
 #include "raylib.h"
+#include <math.h>
 #include "intro_scene.h"
 #include "../utils/constants.h"
 #include "../core/scene_manager.h"
@@ -58,18 +59,18 @@ void InitIntroScene()
     introImages[10] = LoadTexture("../assets/intro/image-11.jpg");
     introImages[11] = LoadTexture("../assets/intro/image-12.jpg");
     
-    captions[0] = "Once, there was a happy family, holding onto a quite moment\nthat felt like it would last forever.";
-    captions[1] = "They left for what should've been just\nanother normal drive.";
-    captions[2] = "Nothing felt wrong-just an ordinary day,\nlike any other.";
-    captions[3] = "Then, everything changed-\nheadlights, no time to react.";
-    captions[4] = "One survived. One didn't";
-    captions[5] = "Years later, only one remains,\nstuck in a memory they can't let go.";
-    captions[6] = "The father starts building time machine\nto go back.";
+    captions[0] = "Once, there was a happy family, holding onto a quite moment that felt like it would last forever.";
+    captions[1] = "They left for what should've been just another normal drive.";
+    captions[2] = "Nothing felt wrong-just an ordinary day, like any other.";
+    captions[3] = "Then, everything changed-headlights, no time to react.";
+    captions[4] = "One survived. One didn't.";
+    captions[5] = "Years later, only one remains, stuck in a memory they can't let go.";
+    captions[6] = "The father starts building time machine to go back.";
     captions[7] = "He spends years trying to make it work.";
     captions[8] = "He almost gives up.";
     captions[9] = "Then it finally works-the past appears again.";
-    captions[10] = "The moment before everything went wrong\nis within reach";
-    captions[11] = "He steps forward, knowing he can't fix it alone-\nhe has to face it together across time.";
+    captions[10] = "The moment before everything went wrong is within reach";
+    captions[11] = "He steps forward, knowing he can't fix it alone-he has to face it together across time.";
     
     sourceIntro = (Rectangle){0, 0, introImages[0].width, introImages[0].height};
     destIntro = (Rectangle){0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
@@ -136,9 +137,6 @@ void DrawIntroScene()
     );
 
     // ===== CAPTION =====
-    int fontSize = 30;
-    int textWidth = MeasureText(captions[currentIntro], fontSize);
-
     DrawRectangle(
         0,
         SCREEN_HEIGHT - 150,
@@ -146,9 +144,40 @@ void DrawIntroScene()
         150,
         Fade(BLACK, 0.6f * alpha)
     );
+    
+    int fontSize = 23;
+    int spacing = 2;
+    //int textWidth = MeasureText(captions[currentIntro], fontSize);
+    Vector2 size = MeasureTextEx(monologFont, captions[currentIntro], fontSize, spacing);
+    Color outerGlow = (Color){255, 220, 120, 255};
 
-    //DrawText(captions[currentIntro],SCREEN_WIDTH/2 - textWidth/2,SCREEN_HEIGHT - 130,fontSize,Fade(WHITE, alpha));
-    DrawTextEx(monologFont, captions[currentIntro], (Vector2){SCREEN_WIDTH/2 - textWidth/2,SCREEN_HEIGHT - 130}, fontSize, 2, Fade(WHITE, alpha));
+    //GLOW TEXT
+    Vector2 pos = {SCREEN_WIDTH/2 - size.x/2, SCREEN_HEIGHT - 80};
+
+    // OUTER GLOW TIPIS (radius 1)
+    for (int i = -2; i <= 2; i++)
+    {
+        for (int j = -2; j <= 2; j++)
+        {
+            // skip tengah (biar ini pure outer glow)
+            if (i == 0 && j == 0) continue;
+
+            float dist = sqrtf(i*i + j*j); // 1 atau 1.4 (diagonal)
+            float alphaGlow = 0.18f * (1.0f - dist / 1.5f);
+
+            DrawTextEx(
+                monologFont,
+                captions[currentIntro],
+                (Vector2){pos.x + i, pos.y + j},
+                fontSize,
+                spacing,
+                Fade(outerGlow, 0.1f)
+            );
+        }
+    }
+
+    // MAIN TEXT
+    DrawTextEx(monologFont, captions[currentIntro], pos, fontSize, spacing, Fade(WHITE, alpha));
 }
 
 void UnloadIntroScene()

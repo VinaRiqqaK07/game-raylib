@@ -168,6 +168,23 @@ void DrawMenuScene()
         }
     }
     
+    /*
+    Vector2 pos = {100, 100};
+    const char *text = "Hello Glow!";
+    int fontSize = 20;
+
+    // Glow layer
+    for (int i = -2; i <= 2; i++)
+    {
+        for (int j = -2; j <= 2; j++)
+        {
+            DrawText(text, pos.x + i, pos.y + j, fontSize, Fade(YELLOW, 0.2f));
+        }
+    }
+    */
+    // Main text
+    //DrawText(text, pos.x, pos.y, fontSize, WHITE);
+    
 }
 
 void UnloadMenuScene()

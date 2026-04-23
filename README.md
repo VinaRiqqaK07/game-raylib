@@ -1,7 +1,7 @@
 # Developed in Time
 
 ### Description
-**Developed in Time** is a **story-driven cooperative puzzle game** built using **Raylib and C language**. The game is designed to be played by **two players offline on separate screens**. Each player receives **different pieces of information** so the players must **communicate and collaborate** in order to progress through the game and uncover the story.
+**Between Two Moments** is a **story-driven cooperative puzzle game** built using **Raylib and C language**. The game is designed to be played by **two players offline on separate screens**. Each player receives **different pieces of information** so the players must **communicate and collaborate** in order to progress through the game and uncover the story.
 
 ### Features
 - Cooperative puzzle gameplay
@@ -27,12 +27,11 @@ project-folder
 │   └── utils/                 # Helper functions and utilities
 │
 ├── main.c                     # Main entry point of the program
-├── scene_template.c           # Template for creating new scenes
 │
 ├── save.dat                   # Save file for storing game progress
 │
-├── main.exe                   # Executable generated after build
-└── between-two-moments.exe    # Previous executable name (older version)
+├── main.exe                   # Executable generated after build (old version)
+└── between-two-moments.exe    # Executable game
 ```
 
 ## How to Run the Game
@@ -73,7 +72,7 @@ echo
 echo > Compile program
 echo -----------------------
 $(CC) --version
-$(CC) -o $(PROJECT_NAME).exe main.c core/game.c core/scene_manager.c objects/box.c systems/moments_system.c systems/sequence_system.c systems/connect_minigame.c systems/lighting_system.c scenes/menu_scene.c scenes/selectrole_scene.c scenes/intro_scene.c scenes/ending_scene.c scenes/puzzle1/puzzle1_past_scene.c scenes/puzzle1/puzzle1_future_scene.c scenes/puzzle2/puzzle2_past_scene.c scenes/puzzle2/puzzle2_future_scene.c scenes/puzzle3/puzzle3_future_scene.c scenes/puzzle3/puzzle3_past_scene.c scenes/puzzle4/puzzle4_past_scene.c scenes/puzzle4/puzzle4_future_scene.c systems/save_system.c systems/ui_system.c systems/keypad_system.c systems/keypad_system2.c systems/caption_system.c systems/zoom_system.c systems/wiring_minigame.c $(CFLAGS) $(LDFLAGS)
+$(CC) -o $(PROJECT_NAME).exe main.c core/game.c core/scene_manager.c core/audio_manager.c objects/box.c systems/moments_system.c systems/sequence_system.c systems/connect_minigame.c systems/lighting_system.c scenes/menu_scene.c scenes/selectrole_scene.c scenes/intro_scene.c scenes/ending_scene.c scenes/puzzle1/puzzle1_past_scene.c scenes/puzzle1/puzzle1_future_scene.c scenes/puzzle2/puzzle2_past_scene.c scenes/puzzle2/puzzle2_future_scene.c scenes/puzzle3/puzzle3_future_scene.c scenes/puzzle3/puzzle3_past_scene.c scenes/puzzle4/puzzle4_past_scene.c scenes/puzzle4/puzzle4_future_scene.c systems/save_system.c systems/ui_system.c systems/keypad_system.c systems/keypad_system2.c systems/caption_system.c systems/zoom_system.c systems/wiring_minigame.c $(CFLAGS) $(LDFLAGS)
 echo
 echo > Reset Environment
 echo --------------------------

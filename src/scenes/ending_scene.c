@@ -46,15 +46,22 @@ void InitEndingScene()
     
     if (game.role == ROLE_PAST)
     {
+        /* OLD TEXT
         endingCaptions[1] = "This photo... someone's handing him car keys.\nWhat's about to happen...?";
         endingCaptions[0] = "The clock... It worked. And this photo..\nWhy is only my son circled? \nIs something going to happen to him?";
         endingCaptions[2] = "Another photo... a car this time. Why does this feel... wrong?";
         endingCaptions[3] = "This is all of us... They're smiling...\nI can't change what will happen,\nbut atleast I gave them this moment.";
+        */
+        
+        endingCaptions[0] = "I lost my son in a car accident. I tried to change it-\ngoing back, warning my past self, doing everything";
+        endingCaptions[1] = "I could stop him from getting into that car. But no matter what i did, \nthe outcome never changed.";
+        endingCaptions[2] = "Fate stayed the same.\nSo maybe the only thing left isn't to fight it anymore, \nbut to accept it.";
+        endingCaptions[3] = "To go back not to prevent the inevitable, but to cherish\nwhat little time we had left-to hold onto those final moments, \nand make sure they were seen, felt, and remembered.";
     }
     else if (game.role == ROLE_FUTURE)
     {
-        endingCaptions[1] = "I lost my son in a car accident. I tried to change it-\ngoing back, warning my past self, doing everything";
-        endingCaptions[0] = "I could stop him from getting into that car. But no matter what i did, \nthe outcome never changed.";
+        endingCaptions[0] = "I lost my son in a car accident. I tried to change it-\ngoing back, warning my past self, doing everything";
+        endingCaptions[1] = "I could stop him from getting into that car. But no matter what i did, \nthe outcome never changed.";
         endingCaptions[2] = "Fate stayed the same.\nSo maybe the only thing left isn't to fight it anymore, \nbut to accept it.";
         endingCaptions[3] = "To go back not to prevent the inevitable, but to cherish\nwhat little time we had left-to hold onto those final moments, \nand make sure they were seen, felt, and remembered.";
     }

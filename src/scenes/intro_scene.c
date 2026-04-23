@@ -154,7 +154,7 @@ void DrawIntroScene()
     //GLOW TEXT
     Vector2 pos = {SCREEN_WIDTH/2 - size.x/2, SCREEN_HEIGHT - 80};
 
-    // OUTER GLOW TIPIS (radius 1)
+    // OUTER GLOW TIPIS
     for (int i = -2; i <= 2; i++)
     {
         for (int j = -2; j <= 2; j++)
@@ -171,7 +171,7 @@ void DrawIntroScene()
                 (Vector2){pos.x + i, pos.y + j},
                 fontSize,
                 spacing,
-                Fade(outerGlow, 0.1f)
+                Fade(outerGlow, 0.07f)
             );
         }
     }
